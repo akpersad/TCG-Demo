@@ -5,7 +5,7 @@ import React, { FormEvent, useState } from 'react';
 import { useSignUp } from '@clerk/nextjs';
 import { SignUpResource } from '@clerk/types';
 import { insertUserFromClient } from '@/app/client';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 const SignUp = () => {
   const { signUp, isLoaded } = useSignUp();

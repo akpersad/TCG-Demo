@@ -1,13 +1,11 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
 import { useState } from 'react';
 import { PokemonClient } from 'pokenode-ts';
 import { getPokeNames } from './utils/pokeApiClient';
 import { getCardsByName } from './utils/tcgClient';
 import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
-import { SignedOut } from '@clerk/nextjs';
 
 export default function Home() {
   const api = new PokemonClient();
@@ -55,9 +53,6 @@ export default function Home() {
 
   return (
     <div className='grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]'>
-      <SignedOut>
-        <Link href='/sign-up'>Sign Up</Link>
-      </SignedOut>
       <main className='flex flex-col gap-8 row-start-2 items-center'>
         <Image
           className='dark:invert'
