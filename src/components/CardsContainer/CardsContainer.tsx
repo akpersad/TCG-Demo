@@ -14,8 +14,16 @@ const CardsContainer = ({ initialCards }: Props) => {
   const [displayCards, setDisplayCards] =
     useState<PokemonTCG.Card[]>(initialCards);
 
-  const showCards = async ({ pokemonName, searchEnergy }: GetCardsProps) => {
-    const cards = await getCardsByName({ pokemonName, searchEnergy });
+  const showCards = async ({
+    pokemonName,
+    searchEnergy,
+    searchSubtypes,
+  }: GetCardsProps) => {
+    const cards = await getCardsByName({
+      pokemonName,
+      searchEnergy,
+      searchSubtypes,
+    });
     setDisplayCards(cards);
   };
 

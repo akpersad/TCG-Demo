@@ -2,13 +2,17 @@ import { GetCardsProps } from '@/types/types';
 import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
 
 const queryBuilder = (queries: string[]): string => {
-  const combiner = queries.filter((item) => item).length > 1 ? ' AND ' : ' ';
-  return queries.join(combiner);
+  const sanitizedQueries = queries.filter((item) => item);
+  const combiner =
+    sanitizedQueries.filter((item) => item).length > 1 ? ' AND ' : ' ';
+  return sanitizedQueries.join(combiner);
 };
 
 export const getCardsByName = async ({
   pokemonName,
   searchEnergy,
+  searchSubtypes,
+  pageSize = 12,
 }: GetCardsProps) => {
   const cardStr = pokemonName.length > 0 ? `name:${pokemonName}` : '';
   const queryArray = [cardStr];
@@ -21,9 +25,18 @@ export const getCardsByName = async ({
     queryArray.push(`(${energyStr})`);
   }
 
+  if (searchSubtypes?.some((subtype) => subtype.checked)) {
+    const subtypeStr = searchSubtypes
+      .filter((subtype) => subtype.checked)
+      .map((subtype) => `subtypes:${subtype.name}`)
+      .join(' OR ');
+    queryArray.push(`(${subtypeStr})`);
+  }
+
   const cards = await PokemonTCG.findCardsByQueries({
     q: queryBuilder(queryArray),
     orderBy: '-set.releaseDate',
+    pageSize,
   });
-  return cards.slice(0, 10);
+  return cards;
 };

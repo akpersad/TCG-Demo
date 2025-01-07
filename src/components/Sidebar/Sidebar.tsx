@@ -6,9 +6,15 @@ import { getPokeNames } from '@/app/utils/pokeApiClient';
 import EnergyCheckboxes from '@/components/EnergyCheckboxes/EnergyCheckboxes';
 import { energyJSON } from '@/constants/energy';
 import { GetCardsProps } from '@/types/types';
+import SubtypesCheckboxes from '@/components/SubtypesCheckboxes/SubtypesCheckboxes';
+import { subtypes as SUBTYPES_JSON } from '@/constants/subtypes';
 
 type Props = {
-  showCards: ({ pokemonName, searchEnergy }: GetCardsProps) => Promise<void>;
+  showCards: ({
+    pokemonName,
+    searchEnergy,
+    searchSubtypes,
+  }: GetCardsProps) => Promise<void>;
   searchLoading: boolean;
 };
 
@@ -25,6 +31,7 @@ const Sidebar = ({ showCards, searchLoading }: Props) => {
   const [filteredData, setFilteredData] = useState<string[]>([]);
   const [activeIndex, setActiveIndex] = useState(-1);
   const [searchEnergy, setSearchEnergy] = useState(energyBase());
+  const [searchSubtypes, setSearchSubtypes] = useState(SUBTYPES_JSON);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -40,7 +47,7 @@ const Sidebar = ({ showCards, searchLoading }: Props) => {
   };
 
   const handleCheck = (
-    energyObj: {
+    jsonOBJ: {
       name: string;
       checked: boolean;
     }[],
@@ -54,12 +61,12 @@ const Sidebar = ({ showCards, searchLoading }: Props) => {
     >,
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const foundIndex = energyObj.findIndex(
+    const foundIndex = jsonOBJ.findIndex(
       (item) => item.name === e.target.value
     );
-    const updatedEnergy = [...energyObj];
-    updatedEnergy[foundIndex].checked = e.target.checked;
-    objSetter(updatedEnergy);
+    const updatedOBJ = [...jsonOBJ];
+    updatedOBJ[foundIndex].checked = e.target.checked;
+    objSetter(updatedOBJ);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -124,6 +131,9 @@ const Sidebar = ({ showCards, searchLoading }: Props) => {
               )}
             </div>
           </li>
+        </ul>
+        <ul className='pt-4 mt-4 space-y-2 font-medium border-t border-gray-200 dark:border-gray-700'>
+          <h2 className='mb-4'>Energy Type</h2>
           <li>
             <EnergyCheckboxes
               energies={searchEnergy}
@@ -131,11 +141,27 @@ const Sidebar = ({ showCards, searchLoading }: Props) => {
               handleCheck={handleCheck}
             />
           </li>
+        </ul>
+        <ul className='pt-4 mt-4 space-y-2 font-medium border-t border-gray-200 dark:border-gray-700'>
+          <h2 className='mb-4'>Sub Type</h2>
+          <li>
+            <SubtypesCheckboxes
+              searchSubtypes={searchSubtypes}
+              setSearchSubtypes={setSearchSubtypes}
+              handleCheck={handleCheck}
+            />
+          </li>
+        </ul>
+        <ul className='pt-4 mt-4 space-y-2 font-medium border-t border-gray-200 dark:border-gray-700'>
           <li>
             <button
               className='w-full px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600'
               onClick={() =>
-                showCards({ pokemonName: searchTerm, searchEnergy })
+                showCards({
+                  pokemonName: searchTerm,
+                  searchEnergy,
+                  searchSubtypes,
+                })
               }
               disabled={searchLoading}
             >

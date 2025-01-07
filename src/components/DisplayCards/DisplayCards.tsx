@@ -8,11 +8,11 @@ interface DisplayCardsProps {
 
 const DisplayCards = ({ displayCards }: DisplayCardsProps) => {
   return (
-    <div className='flex flex-row flex-wrap gap-5'>
+    <div className='grid grid-cols-4 gap-5'>
       {displayCards?.map((card, index) => (
         <div
           key={index}
-          className={`flex flex-col gap-2 ${styles.displayHeader}`}
+          className={`flex flex-col flex-wrap gap-2 ${styles.displayHeader}`}
         >
           <h2 className='capitalize text-lg font-semibold'>{card.name}</h2>
           <Image
