@@ -75,7 +75,7 @@ const Header = () => {
             </li>
             <li>
               <Link
-                href='search/collections'
+                href='/search/collections'
                 className={
                   isCurrentPage('/search/collections')
                     ? activeClass
