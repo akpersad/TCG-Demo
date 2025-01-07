@@ -4,6 +4,7 @@ import DisplayCards from '@/components/DisplayCards/DisplayCards';
 import { useState } from 'react';
 import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
 import { getCardsByName } from '@/app/utils/tcgClient';
+import { GetCardsProps } from '@/types/types';
 
 type Props = {
   initialCards: PokemonTCG.Card[];
@@ -13,8 +14,8 @@ const CardsContainer = ({ initialCards }: Props) => {
   const [displayCards, setDisplayCards] =
     useState<PokemonTCG.Card[]>(initialCards);
 
-  const showCards = async (item: string) => {
-    const cards = await getCardsByName(item);
+  const showCards = async ({ pokemonName, searchEnergy }: GetCardsProps) => {
+    const cards = await getCardsByName({ pokemonName, searchEnergy });
     setDisplayCards(cards);
   };
 

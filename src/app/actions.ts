@@ -1,8 +1,7 @@
 'use server';
-
-import { getCardsByName } from './utils/tcgClient';
+import { getCardsByName } from '@/app/utils/tcgClient';
 
 export const getInitialCards = async () => {
-  const cards = await getCardsByName('charizard');
+  const cards = await getCardsByName({ pokemonName: 'charizard' });
   return cards;
 };
