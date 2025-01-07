@@ -47,7 +47,7 @@ export default function Home() {
   };
 
   const showCards = async (item: string) => {
-    const cards = await getCardsByName(item);
+    const cards = await getCardsByName({ pokemonName: item });
     setDisplayCards(cards);
   };
 
