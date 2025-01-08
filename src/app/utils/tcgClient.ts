@@ -1,4 +1,4 @@
-import { GetCardsProps } from '@/types/types';
+import { GetCardsProps, ParamsProps } from '@/types/types';
 import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
 
 const queryBuilder = (queries: string[]): string => {
@@ -8,11 +8,33 @@ const queryBuilder = (queries: string[]): string => {
   return sanitizedQueries.join(combiner);
 };
 
+const getRequestURLForExtraFields = async (params: ParamsProps) => {
+  const queryString = new URLSearchParams(params).toString();
+  const response = await fetch(
+    `https://api.pokemontcg.io/v2/cards?${queryString}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Api-Key': process.env.NEXT_PUBLIC_POKEMON_TCG_API_KEY || '',
+      },
+    }
+  );
+  const json = await response.json();
+  return {
+    page: json.page as number,
+    pageSize: json.pageSize as number,
+    count: json.count as number,
+    totalCount: json.totalCount as number,
+  };
+};
+
 export const getCardsByName = async ({
   pokemonName,
   searchEnergy,
   searchSubtypes,
   pageSize = 12,
+  page = 1,
 }: GetCardsProps) => {
   const cardStr = pokemonName.length > 0 ? `name:${pokemonName}` : '';
   const queryArray = [cardStr];
@@ -37,6 +59,15 @@ export const getCardsByName = async ({
     q: queryBuilder(queryArray),
     orderBy: '-set.releaseDate',
     pageSize,
+    page,
   });
-  return cards;
+
+  const paginationInfo = await getRequestURLForExtraFields({
+    q: queryBuilder(queryArray),
+    orderBy: '-set.releaseDate',
+    pageSize: pageSize.toString(),
+    page: page.toString(),
+  });
+
+  return { cards, ...paginationInfo };
 };
