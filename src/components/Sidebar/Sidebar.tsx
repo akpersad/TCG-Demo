@@ -14,7 +14,8 @@ type Props = {
     pokemonName,
     searchEnergy,
     searchSubtypes,
-  }: GetCardsProps) => Promise<void>;
+    resetPageCount,
+  }: GetCardsProps & { resetPageCount?: boolean }) => Promise<void>;
   searchLoading: boolean;
 };
 
@@ -161,6 +162,7 @@ const Sidebar = ({ showCards, searchLoading }: Props) => {
                   pokemonName: searchTerm,
                   searchEnergy,
                   searchSubtypes,
+                  resetPageCount: true,
                 })
               }
               disabled={searchLoading}

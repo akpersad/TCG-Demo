@@ -1,76 +1,60 @@
 'use client';
 import Sidebar from '@/components/Sidebar/Sidebar';
 import DisplayCards from '@/components/DisplayCards/DisplayCards';
+import Pagination from '@/components/Pagination/Pagination';
 import { useEffect, useState } from 'react';
 import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
 import { getCardsByName } from '@/app/utils/tcgClient';
-import { GetCardsProps } from '@/types/types';
+import { CardsResponseProps, GetCardsProps } from '@/types/types';
 
-type Props = {
-  initialCards: PokemonTCG.Card[];
-};
-
-const CardsContainer = ({ initialCards }: Props) => {
-  const [displayCards, setDisplayCards] =
-    useState<PokemonTCG.Card[]>(initialCards);
+const CardsContainer = ({ cards, totalCount, page }: CardsResponseProps) => {
+  const [displayCards, setDisplayCards] = useState<PokemonTCG.Card[]>(cards);
   const [cachedSearchParams, setCachedSearchParams] = useState<GetCardsProps>({
     pokemonName: 'charizard',
   });
   const [selectedPageSize, setSelectedPageSize] = useState<number>(12);
+  const [currentPage, setCurrentPage] = useState<number>(page);
+  const [totalCardCount, setTotalCardCount] = useState<number>(totalCount);
 
   const showCards = async ({
     pokemonName,
     searchEnergy,
     searchSubtypes,
     pageSize,
-  }: GetCardsProps) => {
+    page,
+    resetPageCount,
+  }: GetCardsProps & { resetPageCount?: boolean }) => {
     const sanitizedPageSize = pageSize || selectedPageSize;
+    const sanitizedPage = resetPageCount ? 1 : page || currentPage;
 
     setCachedSearchParams({
       pokemonName,
       searchEnergy,
       searchSubtypes,
       pageSize: sanitizedPageSize,
+      page: currentPage,
     });
-    const cards = await getCardsByName({
+    const cardsResponse = await getCardsByName({
       pokemonName,
       searchEnergy,
       searchSubtypes,
       pageSize: sanitizedPageSize,
+      page: sanitizedPage,
     });
-    setDisplayCards(cards);
+    setDisplayCards(cardsResponse.cards);
+    setTotalCardCount(cardsResponse.totalCount);
+    setCurrentPage(cardsResponse.page);
+  };
+
+  const handlePageChange = async (page: number) => {
+    setCurrentPage(page);
+    await showCards({ ...cachedSearchParams, ...{ page } });
   };
 
   useEffect(() => {
     showCards({ ...cachedSearchParams, ...{ pageSize: selectedPageSize } });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedPageSize]);
-
-  const tempFunction = async () => {
-    const params = {
-      q: 'name:charizard',
-      pageSize: '12',
-      orderBy: '-set.releaseDate',
-    };
-    const queryString = new URLSearchParams(params).toString();
-    const response = await fetch(
-      `https://api.pokemontcg.io/v2/cards?${queryString}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Api-Key': '9e20c5b5-bcf6-4e04-9636-676c3e8250c7',
-        },
-      }
-    );
-    const json = await response.json();
-    console.log('🚀 ~ tempFunction ~ response:', json);
-    // ...handle response...
-  };
-
-  useEffect(() => {
-    tempFunction();
-  }, []);
 
   return (
     <div className='container mx-auto my-8'>
@@ -95,6 +79,14 @@ const CardsContainer = ({ initialCards }: Props) => {
         </div>
 
         <DisplayCards displayCards={displayCards} />
+        {totalCardCount > selectedPageSize && (
+          <Pagination
+            totalCount={totalCardCount}
+            pageSize={selectedPageSize}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
+          />
+        )}
       </div>
     </div>
   );
