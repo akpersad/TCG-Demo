@@ -8,6 +8,7 @@ import { energyJSON } from '@/constants/energy';
 import { GetCardsProps } from '@/types/types';
 import SubtypesCheckboxes from '@/components/SubtypesCheckboxes/SubtypesCheckboxes';
 import { subtypes as SUBTYPES_JSON } from '@/constants/subtypes';
+import { convertBoolObjToParams } from '@/app/utils/app';
 
 type Props = {
   showCards: ({
@@ -17,22 +18,42 @@ type Props = {
     resetPageCount,
   }: GetCardsProps & { resetPageCount?: boolean }) => Promise<void>;
   searchLoading: boolean;
+  paramEnergy?: string | null;
+  paramSubType?: string | null;
+  paramName: string;
 };
 
-const energyBase = () => {
+const energyBase = (param?: string | null) => {
+  const sanitizedParam = param ? param.split(',') : [''];
   return energyJSON.map((item) => ({
     name: item.name,
-    checked: false,
+    checked: sanitizedParam.includes(item.name),
   }));
 };
 
-const Sidebar = ({ showCards, searchLoading }: Props) => {
+const subTypesWithParams = (param?: string | null) => {
+  const sanitizedParam = param ? param.split(',') : [''];
+  return SUBTYPES_JSON.map((item) => ({
+    name: item.name,
+    checked: sanitizedParam.includes(item.name),
+  }));
+};
+
+const Sidebar = ({
+  showCards,
+  searchLoading,
+  paramEnergy,
+  paramSubType,
+  paramName,
+}: Props) => {
   const api = new PokemonClient();
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(paramName);
   const [filteredData, setFilteredData] = useState<string[]>([]);
   const [activeIndex, setActiveIndex] = useState(-1);
-  const [searchEnergy, setSearchEnergy] = useState(energyBase());
-  const [searchSubtypes, setSearchSubtypes] = useState(SUBTYPES_JSON);
+  const [searchEnergy, setSearchEnergy] = useState(energyBase(paramEnergy));
+  const [searchSubtypes, setSearchSubtypes] = useState(
+    subTypesWithParams(paramSubType)
+  );
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -162,8 +183,8 @@ const Sidebar = ({ showCards, searchLoading }: Props) => {
               onClick={() =>
                 showCards({
                   pokemonName: searchTerm,
-                  searchEnergy,
-                  searchSubtypes,
+                  searchEnergy: convertBoolObjToParams(searchEnergy),
+                  searchSubtypes: convertBoolObjToParams(searchSubtypes),
                   resetPageCount: true,
                 })
               }

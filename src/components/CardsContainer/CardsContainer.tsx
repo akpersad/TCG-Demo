@@ -2,19 +2,30 @@
 import Sidebar from '@/components/Sidebar/Sidebar';
 import DisplayCards from '@/components/DisplayCards/DisplayCards';
 import Pagination from '@/components/Pagination/Pagination';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
 import { getCardsByName } from '@/app/utils/tcgClient';
 import { CardsResponseProps, GetCardsProps } from '@/types/types';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { filterParams } from '@/app/utils/app';
 
 const CardsContainer = ({ cards, totalCount, page }: CardsResponseProps) => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const [displayCards, setDisplayCards] = useState<PokemonTCG.Card[]>(cards);
-  const [cachedSearchParams, setCachedSearchParams] = useState<GetCardsProps>({
-    pokemonName: 'charizard',
-  });
   const [selectedPageSize, setSelectedPageSize] = useState<number>(12);
   const [currentPage, setCurrentPage] = useState<number>(page);
   const [totalCardCount, setTotalCardCount] = useState<number>(totalCount);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const filterValidParams = (params: Record<string, any>) => {
+    return Object.fromEntries(
+      Object.entries(params).filter(
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        ([_, value]) => value !== undefined && value !== null && value !== ''
+      )
+    );
+  };
 
   const showCards = async ({
     pokemonName,
@@ -27,13 +38,16 @@ const CardsContainer = ({ cards, totalCount, page }: CardsResponseProps) => {
     const sanitizedPageSize = pageSize || selectedPageSize;
     const sanitizedPage = resetPageCount ? 1 : page || currentPage;
 
-    setCachedSearchParams({
+    const queryParams = filterValidParams({
       pokemonName,
       searchEnergy,
       searchSubtypes,
       pageSize: sanitizedPageSize,
-      page: currentPage,
+      page: sanitizedPage,
     });
+    const updatedParams = new URLSearchParams(queryParams).toString();
+    router.push(`/search/cards?${updatedParams}`);
+
     const cardsResponse = await getCardsByName({
       pokemonName,
       searchEnergy,
@@ -46,19 +60,30 @@ const CardsContainer = ({ cards, totalCount, page }: CardsResponseProps) => {
     setCurrentPage(cardsResponse.page);
   };
 
-  const handlePageChange = async (page: number) => {
-    setCurrentPage(page);
-    await showCards({ ...cachedSearchParams, ...{ page } });
+  const getCurrentParams = () => {
+    const paramObj = Object.fromEntries(searchParams.entries());
+    return filterParams(paramObj);
   };
 
-  useEffect(() => {
-    showCards({ ...cachedSearchParams, ...{ pageSize: selectedPageSize } });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedPageSize]);
+  const handlePageChange = async (page: number) => {
+    setCurrentPage(page);
+    await showCards({ ...getCurrentParams(), ...{ page } });
+  };
+
+  const handlePageSizeChange = async (pageSize: number) => {
+    setSelectedPageSize(pageSize);
+    await showCards({ ...getCurrentParams(), ...{ pageSize } });
+  };
 
   return (
     <div className='container mx-auto my-8'>
-      <Sidebar showCards={showCards} searchLoading={false} />
+      <Sidebar
+        showCards={showCards}
+        searchLoading={false}
+        paramName={searchParams.get('pokemonName') || ''}
+        paramEnergy={searchParams.get('searchEnergy')}
+        paramSubType={searchParams.get('searchSubtypes')}
+      />
       <div className='p-4 sm:ml-64'>
         {/* Put page size dropdown code heree */}
 
@@ -69,7 +94,7 @@ const CardsContainer = ({ cards, totalCount, page }: CardsResponseProps) => {
           <select
             id='pageSize'
             value={selectedPageSize}
-            onChange={(e) => setSelectedPageSize(Number(e.target.value))}
+            onChange={(e) => handlePageSizeChange(Number(e.target.value))}
             className='border rounded p-2 bg-black'
           >
             <option value={12}>12</option>

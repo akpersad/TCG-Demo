@@ -1,9 +1,20 @@
 'use server';
 import CardsContainer from '@/components/CardsContainer/CardsContainer';
-import { getInitialCards } from '@/app/actions';
+import { getCardsByName } from '@/app/utils/tcgClient';
+import { filterParams, isEmptyObject } from '@/app/utils/app';
 
-const CardsPage = async () => {
-  const initialCards = await getInitialCards();
+type Props = {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+
+const CardsPage = async ({ searchParams }: Props) => {
+  const initialParams = await searchParams;
+
+  const filteredParams = filterParams(initialParams);
+
+  const initialCards = isEmptyObject(filteredParams)
+    ? await getCardsByName({ pokemonName: 'charizard' })
+    : await getCardsByName(filteredParams);
   return (
     <CardsContainer
       cards={initialCards.cards}
