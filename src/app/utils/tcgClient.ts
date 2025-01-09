@@ -71,3 +71,13 @@ export const getCardsByName = async ({
 
   return { cards, ...paginationInfo };
 };
+
+export const getCardById = async (id: string) => {
+  try {
+    const card = await PokemonTCG.findCardByID(id);
+    return { status: 200, card };
+  } catch (error) {
+    // @ts-expect-error error is not typed
+    return { status: error?.response.status || 404, card: null };
+  }
+};

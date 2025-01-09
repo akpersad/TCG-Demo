@@ -79,7 +79,9 @@ const Sidebar = ({ showCards, searchLoading }: Props) => {
           (prevIndex - 1 + filteredData.length) % filteredData.length
       );
     } else if (event.key === 'Enter' && activeIndex >= 0) {
-      handleItemClick(filteredData[activeIndex]);
+      if (filteredData[activeIndex]) {
+        handleItemClick(filteredData[activeIndex]);
+      }
     }
   };
 
