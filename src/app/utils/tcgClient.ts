@@ -36,21 +36,20 @@ export const getCardsByName = async ({
   pageSize = 12,
   page = 1,
 }: GetCardsProps) => {
-  const cardStr = pokemonName.length > 0 ? `name:${pokemonName}` : '';
+  const cardStr =
+    pokemonName && pokemonName.length > 0 ? `name:${pokemonName}` : '';
   const queryArray = [cardStr];
 
-  if (searchEnergy?.some((energy) => energy.checked)) {
+  if (searchEnergy) {
     const energyStr = searchEnergy
-      .filter((energy) => energy.checked)
-      .map((energy) => `types:${energy.name}`)
+      .map((energy) => `types:${energy}`)
       .join(' OR ');
     queryArray.push(`(${energyStr})`);
   }
 
-  if (searchSubtypes?.some((subtype) => subtype.checked)) {
+  if (searchSubtypes) {
     const subtypeStr = searchSubtypes
-      .filter((subtype) => subtype.checked)
-      .map((subtype) => `subtypes:${subtype.name}`)
+      .map((subtype) => `subtypes:${subtype}`)
       .join(' OR ');
     queryArray.push(`(${subtypeStr})`);
   }

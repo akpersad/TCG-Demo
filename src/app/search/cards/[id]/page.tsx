@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { getCardById } from '@/app/utils/tcgClient';
 import { redirect } from 'next/navigation';
 import Image from 'next/image';

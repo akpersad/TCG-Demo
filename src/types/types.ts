@@ -1,15 +1,9 @@
 import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
 
 export type GetCardsProps = {
-  pokemonName: string;
-  searchEnergy?: {
-    name: string;
-    checked: boolean;
-  }[];
-  searchSubtypes?: {
-    name: string;
-    checked: boolean;
-  }[];
+  pokemonName?: string;
+  searchEnergy?: string[];
+  searchSubtypes?: string[];
   pageSize?: number;
   page?: number;
 };

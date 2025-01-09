@@ -1,5 +1,4 @@
 'use client';
-import { subtypes as SUBTYPES_JSON } from '@/constants/subtypes';
 import { Dispatch, SetStateAction, useMemo } from 'react';
 
 type Props = {
@@ -48,11 +47,12 @@ const SubtypesCheckboxes = ({
     const simpleSearchElements = ['GX', 'EX', 'MEGA', 'V', 'VMAX'];
 
     if (advancedSearch) {
-      return SUBTYPES_JSON;
+      return searchSubtypes;
     }
-    return SUBTYPES_JSON.filter((subtype) =>
+    return searchSubtypes.filter((subtype) =>
       simpleSearchElements.includes(subtype.name)
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [advancedSearch]);
   return (
     <>
@@ -63,6 +63,7 @@ const SubtypesCheckboxes = ({
               id={`${item.name}-checkbox`}
               type='checkbox'
               value={item.name}
+              checked={item.checked}
               className='capitalize w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
               onChange={(e) =>
                 handleCheck(searchSubtypes, setSearchSubtypes, e)
