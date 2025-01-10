@@ -30,11 +30,17 @@ export const filterParams = (params: {
       case 'searchSubtypes':
         filtered.searchSubtypes = (params.searchSubtypes! as string).split(',');
         break;
+      case 'orderBy':
+        filtered.orderBy = params.orderBy! as string;
+        break;
       case 'pageSize':
         filtered.pageSize = parseInt(params.pageSize! as string, 10);
         break;
       case 'page':
         filtered.page = parseInt(params.page! as string, 10);
+        break;
+      case 'artist':
+        filtered.artist = params.artist! as string;
         break;
       default:
         break;

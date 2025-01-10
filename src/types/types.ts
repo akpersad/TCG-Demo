@@ -4,8 +4,10 @@ export type GetCardsProps = {
   pokemonName?: string;
   searchEnergy?: string[];
   searchSubtypes?: string[];
+  orderBy?: string;
   pageSize?: number;
   page?: number;
+  artist?: string;
 };
 
 export type ParamsProps = {
