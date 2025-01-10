@@ -33,12 +33,15 @@ export const getCardsByName = async ({
   pokemonName,
   searchEnergy,
   searchSubtypes,
+  orderBy = '-set.releaseDate',
   pageSize = 12,
   page = 1,
+  artist,
 }: GetCardsProps) => {
   const cardStr =
     pokemonName && pokemonName.length > 0 ? `name:${pokemonName}` : '';
-  const queryArray = [cardStr];
+  const artistStr = artist && artist.length > 0 ? `artist:"${artist}"` : '';
+  const queryArray = [cardStr, artistStr];
 
   if (searchEnergy) {
     const energyStr = searchEnergy
@@ -56,14 +59,14 @@ export const getCardsByName = async ({
 
   const cards = await PokemonTCG.findCardsByQueries({
     q: queryBuilder(queryArray),
-    orderBy: '-set.releaseDate',
+    orderBy,
     pageSize,
     page,
   });
 
   const paginationInfo = await getRequestURLForExtraFields({
     q: queryBuilder(queryArray),
-    orderBy: '-set.releaseDate',
+    orderBy,
     pageSize: pageSize.toString(),
     page: page.toString(),
   });
