@@ -1,8 +1,7 @@
-export const dynamic = 'force-dynamic';
-
+'use server';
 import { getCardById } from '@/app/utils/tcgClient';
+import CardContainer from '@/components/CardContainer/CardContainer';
 import { redirect } from 'next/navigation';
-import Image from 'next/image';
 
 const getCardWithId = async (id: string) => {
   return await getCardById(id);
@@ -22,18 +21,7 @@ export default async function Page({ params }: Props) {
 
   return (
     <div className='container mx-auto my-auto'>
-      <div>My Post: {id}</div>
-      {response.card && (
-        <>
-          <div>Name {response.card.name}</div>
-          <Image
-            src={response.card.images.large}
-            alt={response.card.name}
-            width={500}
-            height={700}
-          />
-        </>
-      )}
+      {response.card && <CardContainer cardData={response.card} />}
     </div>
   );
 }
