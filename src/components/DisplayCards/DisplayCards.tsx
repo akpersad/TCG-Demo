@@ -1,6 +1,6 @@
 import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
 import LoadingOverlay from '@/components/LoadingOverlay/LoadingOverlay';
-import CardWithInformation from '../CardWithInformation/CardWithInformation';
+import CardWithInformation from '@/components/CardWithInformation/CardWithInformation';
 
 interface DisplayCardsProps {
   displayCards?: PokemonTCG.Card[];
