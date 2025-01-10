@@ -8,8 +8,10 @@ import { getCardsByName } from '@/app/utils/tcgClient';
 import { CardsResponseProps, GetCardsProps } from '@/types/types';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { filterParams } from '@/app/utils/app';
+import { useUser } from '@clerk/nextjs';
 
 const CardsContainer = ({ cards, totalCount, page }: CardsResponseProps) => {
+  const { isSignedIn } = useUser();
   const searchParams = useSearchParams();
   const router = useRouter();
   const [displayCards, setDisplayCards] = useState<PokemonTCG.Card[]>(cards);
@@ -103,7 +105,7 @@ const CardsContainer = ({ cards, totalCount, page }: CardsResponseProps) => {
           </select>
         </div>
 
-        <DisplayCards displayCards={displayCards} />
+        <DisplayCards displayCards={displayCards} isSignedIn={isSignedIn} />
         {totalCardCount > selectedPageSize && (
           <Pagination
             totalCount={totalCardCount}
