@@ -18,6 +18,7 @@ const CardsContainer = ({ cards, totalCount, page }: CardsResponseProps) => {
   const [selectedPageSize, setSelectedPageSize] = useState<number>(12);
   const [currentPage, setCurrentPage] = useState<number>(page);
   const [totalCardCount, setTotalCardCount] = useState<number>(totalCount);
+  const [dataLoading, setDataLoading] = useState<boolean>(false);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const filterValidParams = (params: Record<string, any>) => {
@@ -37,6 +38,7 @@ const CardsContainer = ({ cards, totalCount, page }: CardsResponseProps) => {
     page,
     resetPageCount,
   }: GetCardsProps & { resetPageCount?: boolean }) => {
+    setDataLoading(true);
     const sanitizedPageSize = pageSize || selectedPageSize;
     const sanitizedPage = resetPageCount ? 1 : page || currentPage;
 
@@ -60,6 +62,7 @@ const CardsContainer = ({ cards, totalCount, page }: CardsResponseProps) => {
     setDisplayCards(cardsResponse.cards);
     setTotalCardCount(cardsResponse.totalCount);
     setCurrentPage(cardsResponse.page);
+    setDataLoading(false);
   };
 
   const getCurrentParams = () => {
@@ -105,7 +108,11 @@ const CardsContainer = ({ cards, totalCount, page }: CardsResponseProps) => {
           </select>
         </div>
 
-        <DisplayCards displayCards={displayCards} isSignedIn={isSignedIn} />
+        <DisplayCards
+          displayCards={displayCards}
+          isSignedIn={isSignedIn}
+          dataLoading={dataLoading}
+        />
         {totalCardCount > selectedPageSize && (
           <Pagination
             totalCount={totalCardCount}
