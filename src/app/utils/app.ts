@@ -20,6 +20,7 @@ export const filterParams = (params: {
   const filtered = {} as GetCardsProps;
 
   Object.keys(params).forEach((key) => {
+    console.log('🚀 ~ Object.keys ~ key:', key);
     switch (key) {
       case 'pokemonName':
         filtered.pokemonName = params.pokemonName as string;
