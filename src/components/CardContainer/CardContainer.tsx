@@ -263,7 +263,10 @@ const CardContainer = ({ cardData }: Props) => {
               <div className='calcBody flex mt-2 text-lg'>
                 <p className='flex justify-center items-center'>
                   <span className='mr-2'>
-                    <Link href={`/search/cards?setId=${cardData.set.id}`}>
+                    <Link
+                      href={`/search/cards?setId=${cardData.set.id}`}
+                      className='text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent'
+                    >
                       {cardData.set.name}
                     </Link>
                   </span>
@@ -314,7 +317,10 @@ const CardContainer = ({ cardData }: Props) => {
               <div className='calcHeader text-center text-sm'>Artist</div>
               <div className='calcBody flex mt-2 text-lg'>
                 <p className='flex justify-center items-center'>
-                  <Link href={`/search/cards?artist=${cardData.artist}`}>
+                  <Link
+                    href={`/search/cards?artist=${cardData.artist}`}
+                    className='text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent'
+                  >
                     {cardData.artist}
                   </Link>
                 </p>
