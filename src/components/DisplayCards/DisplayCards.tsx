@@ -1,31 +1,30 @@
-import Image from 'next/image';
 import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
-import styles from './DisplayCards.module.scss';
-import Link from 'next/link';
+import LoadingOverlay from '@/components/LoadingOverlay/LoadingOverlay';
+import CardWithInformation from '@/components/CardWithInformation/CardWithInformation';
 
 interface DisplayCardsProps {
   displayCards?: PokemonTCG.Card[];
+  isSignedIn?: boolean;
+  dataLoading?: boolean;
 }
 
-const DisplayCards = ({ displayCards }: DisplayCardsProps) => {
+const DisplayCards = ({
+  displayCards,
+  isSignedIn,
+  dataLoading,
+}: DisplayCardsProps) => {
   return (
-    <div className='grid grid-cols-4 gap-5'>
-      {displayCards?.map((card, index) => (
-        <div
-          key={index}
-          className={`flex flex-col flex-wrap gap-2 ${styles.displayHeader}`}
-        >
-          <Link href={`/search/cards/${card.id}`}>
-            <h2 className='capitalize text-lg font-semibold'>{card.name}</h2>
-            <Image
-              src={card.images.small}
-              alt={card.name}
-              width={300}
-              height={500}
-            />
-          </Link>
-        </div>
-      ))}
+    <div className='relative'>
+      {dataLoading && <LoadingOverlay />}
+      <div className='grid grid-cols-4 gap-5'>
+        {displayCards?.map((card, index) => (
+          <CardWithInformation
+            key={`display-card-${card.id}-${index}`}
+            card={card}
+            isSignedIn={isSignedIn}
+          />
+        ))}
+      </div>
     </div>
   );
 };

@@ -8,14 +8,17 @@ import { getCardsByName } from '@/app/utils/tcgClient';
 import { CardsResponseProps, GetCardsProps } from '@/types/types';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { filterParams } from '@/app/utils/app';
+import { useUser } from '@clerk/nextjs';
 
 const CardsContainer = ({ cards, totalCount, page }: CardsResponseProps) => {
+  const { isSignedIn } = useUser();
   const searchParams = useSearchParams();
   const router = useRouter();
   const [displayCards, setDisplayCards] = useState<PokemonTCG.Card[]>(cards);
   const [selectedPageSize, setSelectedPageSize] = useState<number>(12);
   const [currentPage, setCurrentPage] = useState<number>(page);
   const [totalCardCount, setTotalCardCount] = useState<number>(totalCount);
+  const [dataLoading, setDataLoading] = useState<boolean>(false);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const filterValidParams = (params: Record<string, any>) => {
@@ -35,6 +38,7 @@ const CardsContainer = ({ cards, totalCount, page }: CardsResponseProps) => {
     page,
     resetPageCount,
   }: GetCardsProps & { resetPageCount?: boolean }) => {
+    setDataLoading(true);
     const sanitizedPageSize = pageSize || selectedPageSize;
     const sanitizedPage = resetPageCount ? 1 : page || currentPage;
 
@@ -58,6 +62,7 @@ const CardsContainer = ({ cards, totalCount, page }: CardsResponseProps) => {
     setDisplayCards(cardsResponse.cards);
     setTotalCardCount(cardsResponse.totalCount);
     setCurrentPage(cardsResponse.page);
+    setDataLoading(false);
   };
 
   const getCurrentParams = () => {
@@ -103,7 +108,11 @@ const CardsContainer = ({ cards, totalCount, page }: CardsResponseProps) => {
           </select>
         </div>
 
-        <DisplayCards displayCards={displayCards} />
+        <DisplayCards
+          displayCards={displayCards}
+          isSignedIn={isSignedIn}
+          dataLoading={dataLoading}
+        />
         {totalCardCount > selectedPageSize && (
           <Pagination
             totalCount={totalCardCount}
