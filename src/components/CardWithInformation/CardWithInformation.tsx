@@ -15,7 +15,7 @@ const CardWithInformation = ({ card, isSignedIn }: Props) => {
   const [showSavedToDB, setShowSavedToDB] = useState<boolean>(false);
   return (
     <div
-      className={`flex flex-col flex-wrap gap-2 relative ${styles.displayHeader}`}
+      className={`flex flex-col flex-wrap gap-2 relative ${styles.displayHeader} h-full`}
     >
       {isSignedIn && (
         <button

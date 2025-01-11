@@ -42,6 +42,9 @@ export const filterParams = (params: {
       case 'artist':
         filtered.artist = params.artist! as string;
         break;
+      case 'setId':
+        filtered.setId = params.setId! as string;
+        break;
       default:
         break;
     }
