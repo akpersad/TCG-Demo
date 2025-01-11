@@ -78,17 +78,28 @@ const Header = () => {
             </li>
             <li>
               <Link
-                href='/search/collections'
+                href='/search/sets'
                 className={
-                  isCurrentPage('/search/collections')
-                    ? activeClass
-                    : inactiveClass
+                  isCurrentPage('/search/sets') ? activeClass : inactiveClass
                 }
               >
-                Collections
+                Sets
               </Link>
             </li>
             <SignedIn>
+              <li>
+                <Link
+                  href='/search/collections'
+                  className={
+                    isCurrentPage('/search/collections')
+                      ? activeClass
+                      : inactiveClass
+                  }
+                >
+                  Collections
+                </Link>
+              </li>
+
               <li>
                 <UserButton />
               </li>

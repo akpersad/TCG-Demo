@@ -37,11 +37,13 @@ export const getCardsByName = async ({
   pageSize = 12,
   page = 1,
   artist,
+  setId,
 }: GetCardsProps) => {
   const cardStr =
     pokemonName && pokemonName.length > 0 ? `name:${pokemonName}` : '';
   const artistStr = artist && artist.length > 0 ? `artist:"${artist}"` : '';
-  const queryArray = [cardStr, artistStr];
+  const setIdStr = setId && setId.length > 0 ? `set.id:${setId}` : '';
+  const queryArray = [cardStr, artistStr, setIdStr];
 
   if (searchEnergy) {
     const energyStr = searchEnergy
@@ -82,4 +84,19 @@ export const getCardById = async (id: string) => {
     // @ts-expect-error error is not typed
     return { status: error?.response.status || 404, card: null };
   }
+};
+
+export const getSetsByQuery = async () => {
+  const sets = await PokemonTCG.findSetsByQueries({
+    q: '',
+    orderBy: '-releaseDate',
+    pageSize: 12,
+    page: 1,
+  });
+  return sets;
+};
+
+export const getAllSets = async () => {
+  const sets = await PokemonTCG.getAllSets();
+  return sets;
 };

@@ -8,6 +8,7 @@ export type GetCardsProps = {
   pageSize?: number;
   page?: number;
   artist?: string;
+  setId?: string;
 };
 
 export type ParamsProps = {
@@ -23,4 +24,10 @@ export type CardsResponseProps = {
   pageSize: number;
   count: number;
   totalCount: number;
+};
+
+export type GroupedSet = {
+  series: string;
+  sets: PokemonTCG.Set[];
+  earliestReleaseDate: string;
 };
