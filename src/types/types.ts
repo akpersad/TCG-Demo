@@ -1,4 +1,5 @@
 import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
+import { Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
 
 export type GetCardsProps = {
   pokemonName?: string;
@@ -9,6 +10,7 @@ export type GetCardsProps = {
   page?: number;
   artist?: string;
   setId?: string;
+  supertype?: Supertype[];
 };
 
 export type ParamsProps = {

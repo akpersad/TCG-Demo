@@ -1,4 +1,5 @@
 import { GetCardsProps } from '@/types/types';
+import { Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
 
 type Props = {
   name: string;
@@ -29,6 +30,11 @@ export const filterParams = (params: {
         break;
       case 'searchSubtypes':
         filtered.searchSubtypes = (params.searchSubtypes! as string).split(',');
+        break;
+      case 'supertype':
+        filtered.supertype = (params.supertype! as string).split(
+          ','
+        ) as Supertype[];
         break;
       case 'orderBy':
         filtered.orderBy = params.orderBy! as string;
