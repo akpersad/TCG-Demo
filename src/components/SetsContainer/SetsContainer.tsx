@@ -28,8 +28,14 @@ const SetsContainer = ({ sets }: Props) => {
                       className='w-full h-48 object-contain'
                     />
                     <div className='p-4'>
-                      <h3 className='text-lg font-semibold'>{set.name}</h3>
-                      <p>{set.releaseDate}</p>
+                      <h3 className='text-xl font-semibold'>{set.name}</h3>
+                      <p>
+                        {new Date(set.releaseDate).toLocaleDateString('en-US', {
+                          month: 'long',
+                          day: 'numeric',
+                          year: 'numeric',
+                        })}
+                      </p>
                       <p>{set.total} cards</p>
                     </div>
                   </div>

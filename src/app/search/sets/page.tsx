@@ -35,7 +35,6 @@ const sortAndGroupSets = (sets: PokemonTCG.Set[]) => {
 const Page = async () => {
   const initialSet = await getAllSets();
   const sortedSets = sortAndGroupSets(initialSet);
-  console.log('🚀 ~ Page ~ sortedSets:', sortedSets);
   return <SetsContainer sets={sortedSets} />;
 };
 
