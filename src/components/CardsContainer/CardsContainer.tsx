@@ -52,6 +52,8 @@ const CardsContainer = ({ cards, totalCount, page }: CardsResponseProps) => {
       orderBy: sanitizedSortBy,
       pageSize: sanitizedPageSize,
       page: sanitizedPage,
+      artist: searchParams.get('artist'),
+      setId: searchParams.get('setId'),
     });
     const updatedParams = new URLSearchParams(queryParams).toString();
     router.push(`/search/cards?${updatedParams}`);
@@ -63,6 +65,8 @@ const CardsContainer = ({ cards, totalCount, page }: CardsResponseProps) => {
       orderBy: sanitizedSortBy,
       pageSize: sanitizedPageSize,
       page: sanitizedPage,
+      artist: searchParams.get('artist') || undefined,
+      setId: searchParams.get('setId') || undefined,
     });
 
     setSortByChoice(sanitizedSortBy);
