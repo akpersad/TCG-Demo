@@ -14,9 +14,7 @@ interface Props {
 const CardWithInformation = ({ card, isSignedIn }: Props) => {
   const [showSavedToDB, setShowSavedToDB] = useState<boolean>(false);
   return (
-    <div
-      className={`flex flex-col flex-wrap gap-2 relative ${styles.displayHeader} h-full`}
-    >
+    <div className={`flex flex-col gap-2 relative ${styles.displayHeader}`}>
       {isSignedIn && (
         <button
           className={styles.saveButton}
@@ -34,7 +32,10 @@ const CardWithInformation = ({ card, isSignedIn }: Props) => {
           />
         </button>
       )}
-      <Link href={`/search/cards/${card.id}`}>
+      <Link
+        href={`/search/cards/${card.id}`}
+        className='h-full flex flex-col justify-between'
+      >
         <h2 className='capitalize text-lg font-semibold'>{card.name}</h2>
         <Image
           src={card.images.small}

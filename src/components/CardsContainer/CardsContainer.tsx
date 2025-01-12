@@ -9,6 +9,7 @@ import { CardsResponseProps, GetCardsProps } from '@/types/types';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { filterParams } from '@/app/utils/app';
 import { useUser } from '@clerk/nextjs';
+import { Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
 
 const CardsContainer = ({ cards, totalCount, page }: CardsResponseProps) => {
   const { isSignedIn } = useUser();
@@ -39,6 +40,7 @@ const CardsContainer = ({ cards, totalCount, page }: CardsResponseProps) => {
     pageSize,
     page,
     resetPageCount,
+    supertype,
   }: GetCardsProps & { resetPageCount?: boolean }) => {
     setDataLoading(true);
     const sanitizedPageSize = pageSize || selectedPageSize;
@@ -49,9 +51,12 @@ const CardsContainer = ({ cards, totalCount, page }: CardsResponseProps) => {
       pokemonName,
       searchEnergy,
       searchSubtypes,
+      supertype,
       orderBy: sanitizedSortBy,
       pageSize: sanitizedPageSize,
       page: sanitizedPage,
+      artist: searchParams.get('artist'),
+      setId: searchParams.get('setId'),
     });
     const updatedParams = new URLSearchParams(queryParams).toString();
     router.push(`/search/cards?${updatedParams}`);
@@ -60,9 +65,12 @@ const CardsContainer = ({ cards, totalCount, page }: CardsResponseProps) => {
       pokemonName,
       searchEnergy,
       searchSubtypes,
+      supertype,
       orderBy: sanitizedSortBy,
       pageSize: sanitizedPageSize,
       page: sanitizedPage,
+      artist: searchParams.get('artist') || undefined,
+      setId: searchParams.get('setId') || undefined,
     });
 
     setSortByChoice(sanitizedSortBy);
@@ -100,6 +108,9 @@ const CardsContainer = ({ cards, totalCount, page }: CardsResponseProps) => {
         paramName={searchParams.get('pokemonName') || ''}
         paramEnergy={searchParams.get('searchEnergy')}
         paramSubType={searchParams.get('searchSubtypes')}
+        paramSupertype={
+          searchParams.get('supertype')?.split(',') as Supertype[]
+        }
       />
       <div className='p-4 sm:ml-64'>
         <div className='flex justify-end'>

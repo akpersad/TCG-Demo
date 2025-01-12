@@ -33,6 +33,7 @@ export const getCardsByName = async ({
   pokemonName,
   searchEnergy,
   searchSubtypes,
+  supertype,
   orderBy = '-set.releaseDate',
   pageSize = 12,
   page = 1,
@@ -57,6 +58,13 @@ export const getCardsByName = async ({
       .map((subtype) => `subtypes:${subtype}`)
       .join(' OR ');
     queryArray.push(`(${subtypeStr})`);
+  }
+
+  if (supertype) {
+    const supertypeStr = supertype
+      .map((type) => `supertype:${type}`)
+      .join(' OR ');
+    queryArray.push(`(${supertypeStr})`);
   }
 
   const cards = await PokemonTCG.findCardsByQueries({
