@@ -42,3 +42,15 @@ export type Collection = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type CollectionItem = {
+  _id: string;
+  collectionID: string;
+  cardID: string;
+  cardName: string;
+  cardType: string[];
+  setId: string;
+  setName: string;
+  createdAt: string;
+  updatedAt: string;
+};

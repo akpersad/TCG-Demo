@@ -1,6 +1,7 @@
 import { MongoClient } from 'mongodb';
 import { SignUpResource } from '@clerk/types';
-import { Collection } from '@/types/types';
+import { Collection, CollectionItem } from '@/types/types';
+import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
 
 export const insertUser = async (user: SignUpResource) => {
   const client = new MongoClient(process.env.MONGODB_URI || '');
@@ -28,7 +29,8 @@ export const insertUser = async (user: SignUpResource) => {
 
     const collectionWithTimestamps = {
       userID: user.createdUserId,
-      name: 'My Liked Cards',
+      name:
+        process.env.NEXT_PUBLIC_FAVORITE_COLLECTION_NAME || 'My Liked Cards',
       description: '',
       createdAt: currentDate,
       updatedAt: currentDate,
@@ -66,6 +68,91 @@ export const getUserCollections = async (userID: string) => {
       .find<Collection>({ userID })
       .toArray();
     return collections;
+  } catch (error) {
+    console.error(error);
+    throw new Error(`Error fetching collections: ${error}`);
+  } finally {
+    await client.close();
+  }
+};
+
+export const getCollectionByUserIDAndName = async (
+  userID: string,
+  collectionName: string
+) => {
+  const client = new MongoClient(process.env.MONGODB_URI || '');
+  try {
+    await client.connect();
+    const database = client.db('TCG-Demo');
+    const collectionsCollection = database.collection('collections');
+
+    const collection = await collectionsCollection.findOne<Collection>({
+      userID,
+      name: collectionName,
+    });
+
+    if (collection?._id) {
+      collection._id = collection._id.toString();
+    }
+    return collection;
+  } catch (error) {
+    console.error(error);
+    throw new Error(`Error fetching collections: ${error}`);
+  } finally {
+    await client.close();
+  }
+};
+
+export const insertCardIntoCollection = async (
+  cardData: PokemonTCG.Card,
+  collectionId: string
+) => {
+  const client = new MongoClient(process.env.MONGODB_URI || '');
+  try {
+    await client.connect();
+    const database = client.db('TCG-Demo');
+    const collectionsCollection = database.collection('collection_items');
+
+    const currentDate = new Date();
+    const collectionItemWithTimestamps = {
+      collectionID: collectionId,
+      cardID: cardData.id,
+      cardName: cardData.name,
+      cardType: cardData.types,
+      setId: cardData.set.id,
+      setName: cardData.set.name,
+      createdAt: currentDate,
+      updatedAt: currentDate,
+    };
+
+    const result = await collectionsCollection.insertOne(
+      collectionItemWithTimestamps
+    );
+    console.log(
+      `New user inserted with the following id: ${result.insertedId}`
+    );
+
+    return { status: 200, result: result.insertedId };
+  } catch (error) {
+    console.error(error);
+    throw new Error(`Error inserting collections: ${error}`);
+  } finally {
+    await client.close();
+  }
+};
+
+export const getCollectionCardIds = async (collectionId: string) => {
+  const client = new MongoClient(process.env.MONGODB_URI || '');
+  try {
+    await client.connect();
+    const database = client.db('TCG-Demo');
+    const collectionsCollection = database.collection('collection_items');
+
+    const collectionItems = await collectionsCollection
+      .find<CollectionItem>({ collectionID: collectionId })
+      .toArray();
+
+    return collectionItems.map((item) => item.cardID);
   } catch (error) {
     console.error(error);
     throw new Error(`Error fetching collections: ${error}`);

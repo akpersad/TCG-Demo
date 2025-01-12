@@ -5,30 +5,49 @@ import { useState } from 'react';
 import Heart from '../../../public/assets/heart.svg';
 import HeartOutline from '../../../public/assets/heart-outline.svg';
 import styles from './CardWithInformation.module.scss';
+import { Collection } from '@/types/types';
+import { insertCardIntoCollection } from '@/app/utils/mongoDB';
+import { insertCardIntoCollectionRequest } from '@/app/client';
 
 interface Props {
   card: PokemonTCG.Card;
   isSignedIn?: boolean;
+  likedCollection?: Collection | null;
+  likedCards?: string[];
 }
 
-const CardWithInformation = ({ card, isSignedIn }: Props) => {
-  const [showSavedToDB, setShowSavedToDB] = useState<boolean>(false);
+const CardWithInformation = ({
+  card,
+  isSignedIn,
+  likedCollection,
+  likedCards,
+}: Props) => {
+  const [showSavedToDB, setShowSavedToDB] = useState<boolean>(
+    Boolean(likedCards?.includes(card.id))
+  );
+
+  const handleSaveToCollectionClick = async () => {
+    setShowSavedToDB(!showSavedToDB);
+    await insertCardIntoCollectionRequest(card, likedCollection!._id);
+    console.log(`Save ${card.name} to collection id: ${likedCollection?._id}`);
+  };
+
   return (
     <div className={`flex flex-col gap-2 relative ${styles.displayHeader}`}>
-      {isSignedIn && (
+      {isSignedIn && likedCollection?._id && (
         <button
           className={styles.saveButton}
           onClick={() => {
             setShowSavedToDB(!showSavedToDB);
-            console.log(`save card ${card.id}`);
+            handleSaveToCollectionClick();
           }}
         >
           <Image
-            src={showSavedToDB ? HeartOutline : Heart}
-            alt={`Save ${card.name} to collection`}
+            src={showSavedToDB ? Heart : HeartOutline}
+            alt={`Save ${card.name} to collection id: ${likedCollection?._id}`}
             title='Save Card to Collection'
-            height={40}
-            width={40}
+            height={20}
+            width={20}
           />
         </button>
       )}

@@ -11,6 +11,10 @@ import { subtypes as SUBTYPES_JSON } from '@/constants/subtypes';
 import { convertBoolObjToParams } from '@/app/utils/app';
 import { Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
 
+interface GetCardsPropsWithReset extends GetCardsProps {
+  resetPageCount?: boolean;
+}
+
 type Props = {
   showCards: ({
     pokemonName,
@@ -18,7 +22,7 @@ type Props = {
     searchSubtypes,
     resetPageCount,
     supertype,
-  }: GetCardsProps & { resetPageCount?: boolean }) => Promise<void>;
+  }: GetCardsPropsWithReset) => Promise<void>;
   searchLoading: boolean;
   paramEnergy?: string | null;
   paramSubType?: string | null;

@@ -60,7 +60,7 @@ export const getCardsByName = async ({
     queryArray.push(`(${subtypeStr})`);
   }
 
-  if (supertype) {
+  if (supertype && supertype.length > 0) {
     const supertypeStr = supertype
       .map((type) => `supertype:${type}`)
       .join(' OR ');
