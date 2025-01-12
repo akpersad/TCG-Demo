@@ -99,7 +99,9 @@ const CardContainer = ({ cardData }: Props) => {
             </div>
             <div className='flex items-center'>
               {/* Type and HP */}
-              <span className='pr-3 text-lg'>{`HP ${cardData.hp}`}</span>
+              {cardData.supertype === 'Pokémon' && (
+                <span className='pr-3 text-lg'>{`HP ${cardData.hp}`}</span>
+              )}
               {cardData.types && (
                 <span>
                   {cardData.types.map((type) => {
@@ -155,7 +157,7 @@ const CardContainer = ({ cardData }: Props) => {
           )}
         </div>
         {/* Ability */}
-        {cardData.abilities && (
+        {cardData.supertype === 'Pokémon' && cardData.abilities && (
           <div className='my-6 pt-6'>
             {cardData.abilities.map((ability) => (
               <div key={`${ability.name}-ability-${cardData.id}`}>
@@ -176,7 +178,7 @@ const CardContainer = ({ cardData }: Props) => {
           </div>
         )}
         {/* Attacks */}
-        {cardData.attacks && (
+        {cardData.supertype === 'Pokémon' && cardData.attacks && (
           <div className='my-6 pt-6'>
             {cardData.attacks.map((attack) => (
               <div
@@ -208,8 +210,8 @@ const CardContainer = ({ cardData }: Props) => {
           </div>
         )}
 
-        <div className='my-6 pt-6 bottomInfoContainer'>
-          {cardData.supertype === 'Pokémon' && (
+        {cardData.supertype === 'Pokémon' && (
+          <div className='my-6 pt-6 bottomInfoContainer'>
             <div className='flex justify-between'>
               {statsObject.map((stat) => {
                 return (
@@ -246,8 +248,23 @@ const CardContainer = ({ cardData }: Props) => {
                 );
               })}
             </div>
-          )}
-        </div>
+          </div>
+        )}
+
+        {cardData.supertype === 'Trainer' ||
+          (cardData.supertype === 'Energy' && cardData.rules && (
+            <div className='my-6 pt-6 bottomInfoContainer'>
+              <div className='flex justify-between'>
+                <div className='flex flex-col'>
+                  <div className='calcBody flex mt-2'>
+                    <p className='flex justify-center items-center'>
+                      {cardData.rules}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
 
         <div className='my-6 pt-6 setInfoContainer'>
           <h4 className='text-xl'>Set Information</h4>
