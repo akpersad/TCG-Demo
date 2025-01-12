@@ -24,9 +24,10 @@ export const insertUserFromClient = async (user: SignUpResource) => {
   return { message: 'Error', status: 400 };
 };
 
-export const insertCardIntoCollectionRequest = async (
+export const cardItemCollectionRequest = async (
+  requestType: string,
   cardData: PokemonTCG.Card,
-  collectionId: string
+  collectionID: string
 ) => {
   try {
     const response = await fetch('/api/collections', {
@@ -35,9 +36,9 @@ export const insertCardIntoCollectionRequest = async (
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        requestType: 'cardToCollection',
+        requestType,
         cardData,
-        collectionId,
+        collectionID,
       }),
     });
 

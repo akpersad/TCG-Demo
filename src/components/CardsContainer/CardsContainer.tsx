@@ -13,7 +13,7 @@ import { Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
 
 interface Props extends CardsResponseProps {
   likedCollection?: Collection | null;
-  likedCards?: string[];
+  likedCards: string[];
 }
 
 const CardsContainer = ({

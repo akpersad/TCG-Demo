@@ -103,10 +103,13 @@ export const getCollectionByUserIDAndName = async (
   }
 };
 
-export const insertCardIntoCollection = async (
-  cardData: PokemonTCG.Card,
-  collectionId: string
-) => {
+export const insertCardIntoCollection = async ({
+  cardData,
+  collectionID,
+}: {
+  cardData: PokemonTCG.Card;
+  collectionID: string;
+}) => {
   const client = new MongoClient(process.env.MONGODB_URI || '');
   try {
     await client.connect();
@@ -115,7 +118,7 @@ export const insertCardIntoCollection = async (
 
     const currentDate = new Date();
     const collectionItemWithTimestamps = {
-      collectionID: collectionId,
+      collectionID,
       cardID: cardData.id,
       cardName: cardData.name,
       cardType: cardData.types,
@@ -133,6 +136,33 @@ export const insertCardIntoCollection = async (
     );
 
     return { status: 200, result: result.insertedId };
+  } catch (error) {
+    console.error(error);
+    throw new Error(`Error inserting collections: ${error}`);
+  } finally {
+    await client.close();
+  }
+};
+
+export const removeCardFromCollection = async ({
+  cardData,
+  collectionID,
+}: {
+  cardData: PokemonTCG.Card;
+  collectionID: string;
+}) => {
+  const client = new MongoClient(process.env.MONGODB_URI || '');
+  try {
+    await client.connect();
+    const database = client.db('TCG-Demo');
+    const collectionsCollection = database.collection('collection_items');
+
+    const result = await collectionsCollection.deleteOne({
+      cardID: cardData.id,
+      collectionID,
+    });
+
+    return { status: 200, result };
   } catch (error) {
     console.error(error);
     throw new Error(`Error inserting collections: ${error}`);

@@ -6,14 +6,13 @@ import Heart from '../../../public/assets/heart.svg';
 import HeartOutline from '../../../public/assets/heart-outline.svg';
 import styles from './CardWithInformation.module.scss';
 import { Collection } from '@/types/types';
-import { insertCardIntoCollection } from '@/app/utils/mongoDB';
-import { insertCardIntoCollectionRequest } from '@/app/client';
+import { cardItemCollectionRequest } from '@/app/client';
 
 interface Props {
   card: PokemonTCG.Card;
   isSignedIn?: boolean;
   likedCollection?: Collection | null;
-  likedCards?: string[];
+  likedCards: string[];
 }
 
 const CardWithInformation = ({
@@ -27,8 +26,12 @@ const CardWithInformation = ({
   );
 
   const handleSaveToCollectionClick = async () => {
+    await cardItemCollectionRequest(
+      showSavedToDB ? 'removeCardFromCollection' : 'addCardToCollection',
+      card,
+      likedCollection!._id
+    );
     setShowSavedToDB(!showSavedToDB);
-    await insertCardIntoCollectionRequest(card, likedCollection!._id);
     console.log(`Save ${card.name} to collection id: ${likedCollection?._id}`);
   };
 
