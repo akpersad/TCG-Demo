@@ -89,11 +89,9 @@ const Header = () => {
             <SignedIn>
               <li>
                 <Link
-                  href='/search/collections'
+                  href='/collections'
                   className={
-                    isCurrentPage('/search/collections')
-                      ? activeClass
-                      : inactiveClass
+                    isCurrentPage('/collections') ? activeClass : inactiveClass
                   }
                 >
                   Collections

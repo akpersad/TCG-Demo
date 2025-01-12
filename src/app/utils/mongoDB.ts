@@ -1,5 +1,6 @@
 import { MongoClient } from 'mongodb';
 import { SignUpResource } from '@clerk/types';
+import { Collection } from '@/types/types';
 
 export const insertUser = async (user: SignUpResource) => {
   const client = new MongoClient(process.env.MONGODB_URI || '');
@@ -7,7 +8,8 @@ export const insertUser = async (user: SignUpResource) => {
   try {
     await client.connect();
     const database = client.db('TCG-Demo');
-    const collection = database.collection('users');
+    const userCollection = database.collection('users');
+    const collectionsCollection = database.collection('collections');
 
     if (!user.createdUserId) {
       throw new Error('User ID is missing');
@@ -24,9 +26,24 @@ export const insertUser = async (user: SignUpResource) => {
       updatedAt: currentDate,
     };
 
-    const result = await collection.insertOne(userWithTimestamps);
+    const collectionWithTimestamps = {
+      userID: user.createdUserId,
+      name: 'My Liked Cards',
+      description: '',
+      createdAt: currentDate,
+      updatedAt: currentDate,
+    };
+
+    const result = await userCollection.insertOne(userWithTimestamps);
     console.log(
       `New user inserted with the following id: ${result.insertedId}`
+    );
+    const collectionResult = await collectionsCollection.insertOne(
+      collectionWithTimestamps
+    );
+    console.log(
+      '🚀 ~ insertUser ~ collectionResult:',
+      collectionResult.insertedId
     );
     response = { message: 'success', status: 200 };
   } catch (error) {
@@ -35,5 +52,24 @@ export const insertUser = async (user: SignUpResource) => {
   } finally {
     await client.close();
     return response;
+  }
+};
+
+export const getUserCollections = async (userID: string) => {
+  const client = new MongoClient(process.env.MONGODB_URI || '');
+  try {
+    await client.connect();
+    const database = client.db('TCG-Demo');
+    const collectionsCollection = database.collection('collections');
+
+    const collections = await collectionsCollection
+      .find<Collection>({ userID })
+      .toArray();
+    return collections;
+  } catch (error) {
+    console.error(error);
+    throw new Error(`Error fetching collections: ${error}`);
+  } finally {
+    await client.close();
   }
 };
