@@ -33,3 +33,25 @@ export type GroupedSet = {
   sets: PokemonTCG.Set[];
   earliestReleaseDate: string;
 };
+
+export type Collection = {
+  _id: string;
+  userID: string;
+  name: string;
+  description: string;
+  cardCount: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type CollectionItem = {
+  _id: string;
+  collectionID: string;
+  cardID: string;
+  cardName: string;
+  cardType: string[];
+  setId: string;
+  setName: string;
+  createdAt: string;
+  updatedAt: string;
+};

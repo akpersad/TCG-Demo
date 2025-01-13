@@ -5,13 +5,24 @@ import Pagination from '@/components/Pagination/Pagination';
 import { useState } from 'react';
 import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
 import { getCardsByName } from '@/app/utils/tcgClient';
-import { CardsResponseProps, GetCardsProps } from '@/types/types';
+import { CardsResponseProps, Collection, GetCardsProps } from '@/types/types';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { filterParams } from '@/app/utils/app';
 import { useUser } from '@clerk/nextjs';
 import { Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
 
-const CardsContainer = ({ cards, totalCount, page }: CardsResponseProps) => {
+interface Props extends CardsResponseProps {
+  likedCollection?: Collection | null;
+  likedCards: string[];
+}
+
+const CardsContainer = ({
+  cards,
+  totalCount,
+  page,
+  likedCollection,
+  likedCards,
+}: Props) => {
   const { isSignedIn } = useUser();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -27,7 +38,11 @@ const CardsContainer = ({ cards, totalCount, page }: CardsResponseProps) => {
     return Object.fromEntries(
       Object.entries(params).filter(
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        ([_, value]) => value !== undefined && value !== null && value !== ''
+        ([_, value]) =>
+          value !== undefined &&
+          value !== null &&
+          value !== '' &&
+          (Array.isArray(value) ? value.length > 0 : true)
       )
     );
   };
@@ -168,6 +183,8 @@ const CardsContainer = ({ cards, totalCount, page }: CardsResponseProps) => {
           displayCards={displayCards}
           isSignedIn={isSignedIn}
           dataLoading={dataLoading}
+          likedCollection={likedCollection}
+          likedCards={likedCards}
         />
         {totalCardCount > selectedPageSize && (
           <Pagination
