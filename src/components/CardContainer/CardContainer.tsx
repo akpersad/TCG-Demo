@@ -5,14 +5,18 @@ import PokeBodyImage from '../../../public/assets/pokebody.png';
 import PokePowerImage from '../../../public/assets/pokepower.png';
 import { energyJSON } from '@/constants/energy';
 import styles from './CardContainer.module.scss';
-import { useMemo } from 'react';
+import { use, useMemo } from 'react';
 import Link from 'next/link';
+import { Collection } from '@/types/types';
+import AddToCollection from '@/components/AddToCollection/AddToCollection';
 
 type Props = {
   cardData: PokemonTCG.Card;
+  userID?: string;
+  collections?: Collection[];
 };
 
-const CardContainer = ({ cardData }: Props) => {
+const CardContainer = ({ cardData, userID, collections }: Props) => {
   const getAbilityImage = (ability: string) => {
     switch (ability) {
       case 'Ability':
@@ -266,6 +270,7 @@ const CardContainer = ({ cardData }: Props) => {
             </div>
           ))}
 
+        {/* Set Information */}
         <div className='my-6 pt-6 setInfoContainer'>
           <h4 className='text-xl'>Set Information</h4>
           <div className='flex justify-between flex-wrap mt-4'>
@@ -350,6 +355,11 @@ const CardContainer = ({ cardData }: Props) => {
             </div>
           </div>
         </div>
+
+        {/* Add To Collection */}
+        {userID && collections && collections?.length > 0 && (
+          <AddToCollection collections={collections} cardData={cardData} />
+        )}
       </div>
     </div>
   );
