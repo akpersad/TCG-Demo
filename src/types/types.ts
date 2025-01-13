@@ -39,6 +39,7 @@ export type Collection = {
   userID: string;
   name: string;
   description: string;
+  cardCount: number;
   createdAt: string;
   updatedAt: string;
 };

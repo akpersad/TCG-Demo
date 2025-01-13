@@ -1,14 +1,17 @@
 import {
-  insertCardIntoCollection,
   insertUser,
+  insertCardIntoCollection,
   removeCardFromCollection,
+  createNewCollection,
 } from '@/app/utils/mongoDB';
 import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
 
 type RequestProps = {
-  requestType: string;
-  cardData: PokemonTCG.Card;
-  collectionID: string;
+  requestType?: string;
+  cardData?: PokemonTCG.Card;
+  collectionID?: string;
+  userID?: string;
+  collectionName?: string;
 };
 
 export async function GET() {
@@ -23,17 +26,40 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const parsedRequest: RequestProps = await request.json();
+    let returnStatus = { status: 300, message: 'Error' };
 
-    const returnStatus =
-      parsedRequest.requestType === 'addCardToCollection'
-        ? await insertCardIntoCollection({
-            cardData: parsedRequest.cardData,
-            collectionID: parsedRequest.collectionID,
-          })
-        : await removeCardFromCollection({
-            cardData: parsedRequest.cardData,
-            collectionID: parsedRequest.collectionID,
-          });
+    if (
+      parsedRequest.requestType === 'addCardToCollection' &&
+      parsedRequest.cardData &&
+      parsedRequest.collectionID
+    ) {
+      returnStatus = await insertCardIntoCollection({
+        cardData: parsedRequest.cardData,
+        collectionID: parsedRequest.collectionID,
+      });
+    }
+
+    if (
+      parsedRequest.requestType === 'removeCardFromCollection' &&
+      parsedRequest.cardData &&
+      parsedRequest.collectionID
+    ) {
+      returnStatus = await removeCardFromCollection({
+        cardData: parsedRequest.cardData,
+        collectionID: parsedRequest.collectionID,
+      });
+    }
+
+    if (
+      parsedRequest.requestType === 'createNewCollection' &&
+      parsedRequest.userID &&
+      parsedRequest.collectionName
+    ) {
+      returnStatus = await createNewCollection({
+        userID: parsedRequest.userID,
+        collectionName: parsedRequest.collectionName,
+      });
+    }
 
     if (returnStatus.status !== 200) {
       throw new Error('Failed to insert user');
