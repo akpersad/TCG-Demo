@@ -28,7 +28,7 @@ export const cardItemCollectionRequest = async (
   requestType: string,
   cardData: PokemonTCG.Card,
   collectionID: string
-) => {
+): Promise<{ message: string; status: number }> => {
   try {
     const response = await fetch('/api/collections', {
       method: 'POST',
