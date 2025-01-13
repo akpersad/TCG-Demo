@@ -52,3 +52,37 @@ export const cardItemCollectionRequest = async (
   }
   return { message: 'Error', status: 400 };
 };
+
+export const createNewCollectionRequest = async ({
+  collectionName,
+  userID,
+  collectionDescription,
+}: {
+  collectionName: string;
+  userID: string;
+  collectionDescription?: string;
+}): Promise<{ message: string; status: number }> => {
+  try {
+    const response = await fetch('/api/collections', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        requestType: 'createNewCollection',
+        userID,
+        collectionName,
+        collectionDescription,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to create new collection');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error creating new collection:', error);
+  }
+  return { message: 'Error', status: 400 };
+};

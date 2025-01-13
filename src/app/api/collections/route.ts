@@ -12,6 +12,7 @@ type RequestProps = {
   collectionID?: string;
   userID?: string;
   collectionName?: string;
+  collectionDescription?: string;
 };
 
 export async function GET() {
@@ -58,6 +59,7 @@ export async function POST(request: Request) {
       returnStatus = await createNewCollection({
         userID: parsedRequest.userID,
         collectionName: parsedRequest.collectionName,
+        collectionDescription: parsedRequest.collectionDescription || '',
       });
     }
 

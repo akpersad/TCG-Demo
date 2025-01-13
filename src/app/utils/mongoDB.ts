@@ -215,9 +215,11 @@ export const getCollectionCardIds = async (collectionId: string) => {
 export const createNewCollection = async ({
   userID,
   collectionName,
+  collectionDescription,
 }: {
   userID: string;
   collectionName: string;
+  collectionDescription: string;
 }) => {
   const client = new MongoClient(process.env.MONGODB_URI || '');
   try {
@@ -229,7 +231,7 @@ export const createNewCollection = async ({
     const collectionWithTimestamps = {
       userID,
       name: collectionName,
-      description: '',
+      description: collectionDescription,
       cardCount: 0,
       createdAt: currentDate,
       updatedAt: currentDate,
@@ -242,7 +244,11 @@ export const createNewCollection = async ({
       `New collection inserted with the following id: ${result.insertedId}`
     );
 
-    return { status: 200, result: result.insertedId, message: 'success' };
+    return {
+      status: 200,
+      result: result.insertedId.toString(),
+      message: 'success',
+    };
   } catch (error) {
     console.error(error);
     throw new Error(`Error inserting collections: ${error}`);

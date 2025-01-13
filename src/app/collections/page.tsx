@@ -7,7 +7,12 @@ const CollectionsPage = async () => {
   const user = await currentUser();
   const userCollections = await getUserCollections(user?.id || '');
 
-  return <CollectionsContainer userCollections={userCollections} />;
+  return (
+    <CollectionsContainer
+      userCollections={userCollections}
+      userID={user?.id.toString() || ''}
+    />
+  );
 };
 
 export default CollectionsPage;
