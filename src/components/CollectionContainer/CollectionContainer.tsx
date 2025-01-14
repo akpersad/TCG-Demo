@@ -130,6 +130,15 @@ const CollectionContainer = ({
 
   const handleCollectionFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (
+      collectionName === collection.name &&
+      collectionDescription === collection.description
+    ) {
+      setIsEditState(false);
+      return;
+    }
+
     setIsSubmissionPending(true);
     const response = await updateCollectionRequest({
       collectionID: collection._id,
@@ -201,9 +210,13 @@ const CollectionContainer = ({
                     type='text'
                     name='floating_name'
                     id='floating_name'
-                    className='block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer'
+                    className='block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer  disabled:text-slate-500 disabled:shadow-none disabled:cursor-not-allowed'
                     placeholder=' '
                     value={collectionName}
+                    disabled={
+                      collectionName ===
+                      process.env.NEXT_PUBLIC_FAVORITE_COLLECTION_NAME
+                    }
                     required
                   />
                   <label
@@ -222,7 +235,6 @@ const CollectionContainer = ({
                     placeholder=' '
                     value={collectionDescription}
                     rows={1}
-                    required
                   />
                   <label
                     htmlFor='floating_description'

@@ -116,6 +116,10 @@ export const insertCardIntoCollection = async ({
 }) => {
   const client = new MongoClient(process.env.MONGODB_URI || '');
   try {
+    if (!ObjectId.isValid(collectionID)) {
+      return { status: 307, message: 'Invalid ID' };
+    }
+
     await client.connect();
     const database = client.db('TCG-Demo');
     const collectionsCollection = database.collection('collection_items');
@@ -166,6 +170,13 @@ export const removeCardFromCollection = async ({
 }) => {
   const client = new MongoClient(process.env.MONGODB_URI || '');
   try {
+    if (!ObjectId.isValid(collectionID)) {
+      return {
+        status: 307,
+        message: 'Invalid ID',
+      };
+    }
+
     await client.connect();
     const database = client.db('TCG-Demo');
     const collectionsCollection = database.collection('collection_items');
@@ -257,16 +268,25 @@ export const createNewCollection = async ({
   }
 };
 
-export const getCollectionAndItems = async (collectionId: string) => {
+export const getCollectionAndItems = async (collectionID: string) => {
   const client = new MongoClient(process.env.MONGODB_URI || '');
   try {
+    if (!ObjectId.isValid(collectionID)) {
+      return {
+        status: 307,
+        message: 'Invalid ID',
+        collection: null,
+        collectionItems: [],
+      };
+    }
+
     await client.connect();
     const database = client.db('TCG-Demo');
     const collectionsCollection = database.collection('collections');
     const collectionItemsCollection = database.collection('collection_items');
 
     const collection = await collectionsCollection.findOne<Collection>({
-      _id: new ObjectId(collectionId),
+      _id: new ObjectId(collectionID),
     });
 
     if (collection) {
@@ -274,7 +294,7 @@ export const getCollectionAndItems = async (collectionId: string) => {
     }
 
     const collectionItems = await collectionItemsCollection
-      .find<CollectionItem>({ collectionID: collectionId })
+      .find<CollectionItem>({ collectionID })
       .toArray();
 
     return { collection, collectionItems, status: 200, message: 'success' };
@@ -297,6 +317,13 @@ export const updateCollection = async ({
 }) => {
   const client = new MongoClient(process.env.MONGODB_URI || '');
   try {
+    if (!ObjectId.isValid(collectionID)) {
+      return {
+        status: 307,
+        message: 'Invalid ID',
+      };
+    }
+
     await client.connect();
     const database = client.db('TCG-Demo');
     const collectionsCollection = database.collection('collections');
