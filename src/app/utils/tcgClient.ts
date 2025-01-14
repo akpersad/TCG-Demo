@@ -8,6 +8,18 @@ const queryBuilder = (queries: string[]): string => {
   return sanitizedQueries.join(combiner);
 };
 
+const idCombinor = (ids: string[]): string => {
+  return ids.map((id) => `id:${id}`).join(' OR ');
+};
+
+const getCardsByIDs = (ids?: string[]) => {
+  if (!ids || ids.length === 0) {
+    return '';
+  }
+  const query = ids.length > 1 ? idCombinor(ids) : `id:${ids[0]}`;
+  return query;
+};
+
 const getRequestURLForExtraFields = async (params: ParamsProps) => {
   const queryString = new URLSearchParams(params).toString();
   const response = await fetch(
@@ -39,12 +51,14 @@ export const getCardsByName = async ({
   page = 1,
   artist,
   setId,
+  ids,
 }: GetCardsProps) => {
+  const multiIds = getCardsByIDs(ids);
   const cardStr =
     pokemonName && pokemonName.length > 0 ? `name:${pokemonName}` : '';
   const artistStr = artist && artist.length > 0 ? `artist:"${artist}"` : '';
   const setIdStr = setId && setId.length > 0 ? `set.id:${setId}` : '';
-  const queryArray = [cardStr, artistStr, setIdStr];
+  const queryArray = [multiIds, cardStr, artistStr, setIdStr];
 
   if (searchEnergy) {
     const energyStr = searchEnergy

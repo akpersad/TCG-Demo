@@ -11,6 +11,7 @@ export type GetCardsProps = {
   artist?: string;
   setId?: string;
   supertype?: Supertype[];
+  ids?: string[];
 };
 
 export type ParamsProps = {

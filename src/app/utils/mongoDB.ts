@@ -256,3 +256,32 @@ export const createNewCollection = async ({
     await client.close();
   }
 };
+
+export const getCollectionAndItems = async (collectionId: string) => {
+  const client = new MongoClient(process.env.MONGODB_URI || '');
+  try {
+    await client.connect();
+    const database = client.db('TCG-Demo');
+    const collectionsCollection = database.collection('collections');
+    const collectionItemsCollection = database.collection('collection_items');
+
+    const collection = await collectionsCollection.findOne<Collection>({
+      _id: new ObjectId(collectionId),
+    });
+
+    if (collection) {
+      collection._id = collection._id.toString();
+    }
+
+    const collectionItems = await collectionItemsCollection
+      .find<CollectionItem>({ collectionID: collectionId })
+      .toArray();
+
+    return { collection, collectionItems, status: 200, message: 'success' };
+  } catch (error) {
+    console.error(error);
+    throw new Error(`Error fetching collections: ${error}`);
+  } finally {
+    await client.close();
+  }
+};
