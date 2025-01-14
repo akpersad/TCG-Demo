@@ -13,7 +13,7 @@ interface Props {
   card: PokemonTCG.Card;
   isSignedIn?: boolean;
   likedCollection?: Collection | null;
-  likedCards: string[];
+  likedCards?: string[];
 }
 
 const CardWithInformation = ({

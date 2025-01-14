@@ -8,7 +8,7 @@ interface DisplayCardsProps {
   isSignedIn?: boolean;
   dataLoading?: boolean;
   likedCollection?: Collection | null;
-  likedCards: string[];
+  likedCards?: string[];
 }
 
 const DisplayCards = ({
