@@ -9,10 +9,13 @@ import { useState } from 'react';
 import Sidebar from '@/components/Sidebar/Sidebar';
 import DisplayCards from '@/components/DisplayCards/DisplayCards';
 import Pagination from '@/components/Pagination/Pagination';
+import { updateCollectionRequest } from '@/app/client';
+import LoadingOverlay from '@/components/LoadingOverlay/LoadingOverlay';
 
 interface Props extends CardsResponseProps {
   collectionIds: string[];
   collection: Collection;
+  userID: string;
 }
 
 const CollectionContainer = ({
@@ -21,6 +24,7 @@ const CollectionContainer = ({
   page,
   collectionIds,
   collection,
+  userID,
 }: Props) => {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -31,6 +35,14 @@ const CollectionContainer = ({
   const [currentPage, setCurrentPage] = useState<number>(page);
   const [totalCardCount, setTotalCardCount] = useState<number>(totalCount);
   const [dataLoading, setDataLoading] = useState<boolean>(false);
+  const [isEditState, setIsEditState] = useState<boolean>(false);
+  // Collection specific states
+  const [collectionName, setCollectionName] = useState<string>(collection.name);
+  const [collectionDescription, setCollectionDescription] = useState<string>(
+    collection.description
+  );
+  const [isSubmissionPending, setIsSubmissionPending] =
+    useState<boolean>(false);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const filterValidParams = (params: Record<string, any>) => {
@@ -116,6 +128,41 @@ const CollectionContainer = ({
     await showCards({ ...getCurrentParams(), ...{ orderBy } });
   };
 
+  const handleCollectionFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (
+      collectionName === collection.name &&
+      collectionDescription === collection.description
+    ) {
+      setIsEditState(false);
+      return;
+    }
+
+    setIsSubmissionPending(true);
+    const response = await updateCollectionRequest({
+      collectionID: collection._id,
+      collectionName,
+      collectionDescription,
+    });
+    if (response.status !== 200) {
+      setIsSubmissionPending(false);
+      handleFormCancel();
+      return;
+    }
+
+    setCollectionName(collectionName);
+    setCollectionDescription(collectionDescription);
+    setIsSubmissionPending(false);
+    setIsEditState(false);
+  };
+
+  const handleFormCancel = () => {
+    setCollectionName(collection.name);
+    setCollectionDescription(collection.description);
+    setIsEditState(false);
+  };
+
   return (
     <div className='container mx-auto my-8'>
       <Sidebar
@@ -129,12 +176,91 @@ const CollectionContainer = ({
         }
       />
       <div className='p-4 sm:ml-64'>
-        <div className='flex flex-col mb-4'>
-          <h2 className='text-2xl'>{collection.name}</h2>
-          <span className='text-base text-gray-500'>
-            {collection.description}
-          </span>
-        </div>
+        {!isEditState && (
+          <div className='flex mb-4 justify-between'>
+            <div>
+              <h2 className='text-2xl'>{collection.name}</h2>
+              <span className='text-base text-gray-500'>
+                {collection.description}
+              </span>
+            </div>
+            <div>
+              <button
+                className='bg-blue-500 text-white px-4 py-2 rounded'
+                onClick={() => setIsEditState(true)}
+              >
+                Edit Collection Information
+              </button>
+            </div>
+          </div>
+        )}
+
+        {isSubmissionPending && <LoadingOverlay />}
+
+        {isEditState && userID === collection.userID && (
+          <form
+            onSubmit={handleCollectionFormSubmit}
+            onReset={handleFormCancel}
+          >
+            <div className='grid grid-cols-1 md:grid-cols-2 md:gap-6 mb-4'>
+              <div className='flex flex-col w-full'>
+                <div className='relative z-0 w-full mb-5 group'>
+                  <input
+                    onChange={(e) => setCollectionName(e.target.value)}
+                    type='text'
+                    name='floating_name'
+                    id='floating_name'
+                    className='block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer  disabled:text-slate-500 disabled:shadow-none disabled:cursor-not-allowed'
+                    placeholder=' '
+                    value={collectionName}
+                    disabled={
+                      collectionName ===
+                      process.env.NEXT_PUBLIC_FAVORITE_COLLECTION_NAME
+                    }
+                    required
+                  />
+                  <label
+                    htmlFor='floating_name'
+                    className='peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6'
+                  >
+                    Collection Name
+                  </label>
+                </div>
+                <div className='relative z-0 w-full mb-5 group'>
+                  <textarea
+                    onChange={(e) => setCollectionDescription(e.target.value)}
+                    name='floating_description'
+                    id='floating_description'
+                    className='block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer'
+                    placeholder=' '
+                    value={collectionDescription}
+                    rows={1}
+                  />
+                  <label
+                    htmlFor='floating_description'
+                    className='peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6'
+                  >
+                    Collection Description
+                  </label>
+                </div>
+              </div>
+              <div className='flex sm:mt-0 mt-5 md:text-right justify-between items-start sm:justify-end'>
+                <button
+                  className='bg-gray-500 text-white px-4 py-2 rounded'
+                  type='reset'
+                >
+                  Cancel
+                </button>
+                <button
+                  className='bg-blue-500 text-white px-4 py-2 rounded md:ml-2'
+                  type='submit'
+                >
+                  Save Changes
+                </button>
+              </div>
+            </div>
+          </form>
+        )}
         <div className='flex justify-end'>
           {/* Sort By */}
 

@@ -3,6 +3,7 @@ import {
   insertCardIntoCollection,
   removeCardFromCollection,
   createNewCollection,
+  updateCollection,
 } from '@/app/utils/mongoDB';
 import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
 
@@ -58,6 +59,18 @@ export async function POST(request: Request) {
     ) {
       returnStatus = await createNewCollection({
         userID: parsedRequest.userID,
+        collectionName: parsedRequest.collectionName,
+        collectionDescription: parsedRequest.collectionDescription || '',
+      });
+    }
+
+    if (
+      parsedRequest.requestType === 'updateCollection' &&
+      parsedRequest.collectionID &&
+      parsedRequest.collectionName
+    ) {
+      returnStatus = await updateCollection({
+        collectionID: parsedRequest.collectionID,
         collectionName: parsedRequest.collectionName,
         collectionDescription: parsedRequest.collectionDescription || '',
       });

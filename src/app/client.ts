@@ -86,3 +86,37 @@ export const createNewCollectionRequest = async ({
   }
   return { message: 'Error', status: 400 };
 };
+
+export const updateCollectionRequest = async ({
+  collectionID,
+  collectionName,
+  collectionDescription,
+}: {
+  collectionID: string;
+  collectionName: string;
+  collectionDescription: string;
+}): Promise<{ message: string; status: number }> => {
+  try {
+    const response = await fetch('/api/collections', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        requestType: 'updateCollection',
+        collectionID,
+        collectionName,
+        collectionDescription,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to update collection');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error updating collection:', error);
+  }
+  return { message: 'Error', status: 400 };
+};
