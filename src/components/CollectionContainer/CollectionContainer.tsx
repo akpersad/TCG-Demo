@@ -2,7 +2,6 @@
 import { filterParams } from '@/app/utils/app';
 import { getCardsByName } from '@/app/utils/tcgClient';
 import { CardsResponseProps, Collection, GetCardsProps } from '@/types/types';
-import { useUser } from '@clerk/nextjs';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
 import { Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
@@ -23,7 +22,6 @@ const CollectionContainer = ({
   collectionIds,
   collection,
 }: Props) => {
-  const { isSignedIn } = useUser();
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -190,7 +188,7 @@ const CollectionContainer = ({
 
         <DisplayCards
           displayCards={displayCards}
-          isSignedIn={isSignedIn}
+          isSignedIn
           dataLoading={dataLoading}
         />
         {totalCardCount > selectedPageSize && (
