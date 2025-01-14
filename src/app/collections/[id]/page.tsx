@@ -29,8 +29,9 @@ export default async function Page({ params }: Props) {
 
   return (
     <>
-      {collection && (
+      {collection && user?.id && (
         <CollectionContainer
+          userID={user.id}
           collection={collection}
           collectionIds={collectionIds}
           {...cardsData}
