@@ -10,6 +10,7 @@ import Sidebar from '@/components/Sidebar/Sidebar';
 import DisplayCards from '@/components/DisplayCards/DisplayCards';
 import Pagination from '@/components/Pagination/Pagination';
 import { updateCollectionRequest } from '@/app/client';
+import LoadingOverlay from '@/components/LoadingOverlay/LoadingOverlay';
 
 interface Props extends CardsResponseProps {
   collectionIds: string[];
@@ -40,6 +41,8 @@ const CollectionContainer = ({
   const [collectionDescription, setCollectionDescription] = useState<string>(
     collection.description
   );
+  const [isSubmissionPending, setIsSubmissionPending] =
+    useState<boolean>(false);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const filterValidParams = (params: Record<string, any>) => {
@@ -127,18 +130,21 @@ const CollectionContainer = ({
 
   const handleCollectionFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmissionPending(true);
     const response = await updateCollectionRequest({
       collectionID: collection._id,
       collectionName,
       collectionDescription,
     });
     if (response.status !== 200) {
+      setIsSubmissionPending(false);
       handleFormCancel();
       return;
     }
 
     setCollectionName(collectionName);
     setCollectionDescription(collectionDescription);
+    setIsSubmissionPending(false);
     setIsEditState(false);
   };
 
@@ -179,6 +185,9 @@ const CollectionContainer = ({
             </div>
           </div>
         )}
+
+        {isSubmissionPending && <LoadingOverlay />}
+
         {isEditState && userID === collection.userID && (
           <form
             onSubmit={handleCollectionFormSubmit}
