@@ -9,6 +9,7 @@ import { useState } from 'react';
 import Sidebar from '@/components/Sidebar/Sidebar';
 import DisplayCards from '@/components/DisplayCards/DisplayCards';
 import Pagination from '@/components/Pagination/Pagination';
+import { updateCollectionRequest } from '@/app/client';
 
 interface Props extends CardsResponseProps {
   collectionIds: string[];
@@ -126,7 +127,19 @@ const CollectionContainer = ({
 
   const handleCollectionFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('🚀 ~ handleCollectionFormSubmit ~ formSubmitted');
+    const response = await updateCollectionRequest({
+      collectionID: collection._id,
+      collectionName,
+      collectionDescription,
+    });
+    if (response.status !== 200) {
+      handleFormCancel();
+      return;
+    }
+
+    setCollectionName(collectionName);
+    setCollectionDescription(collectionDescription);
+    setIsEditState(false);
   };
 
   const handleFormCancel = () => {

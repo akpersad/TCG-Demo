@@ -285,3 +285,38 @@ export const getCollectionAndItems = async (collectionId: string) => {
     await client.close();
   }
 };
+
+export const updateCollection = async ({
+  collectionID,
+  collectionName,
+  collectionDescription,
+}: {
+  collectionID: string;
+  collectionName: string;
+  collectionDescription?: string;
+}) => {
+  const client = new MongoClient(process.env.MONGODB_URI || '');
+  try {
+    await client.connect();
+    const database = client.db('TCG-Demo');
+    const collectionsCollection = database.collection('collections');
+
+    const result = await collectionsCollection.updateOne(
+      { _id: new ObjectId(collectionID) },
+      {
+        $set: {
+          name: collectionName,
+          description: collectionDescription,
+          updatedAt: new Date(),
+        },
+      }
+    );
+
+    return { status: 200, result, message: 'success' };
+  } catch (error) {
+    console.error(error);
+    throw new Error(`Error updating collection: ${error}`);
+  } finally {
+    await client.close();
+  }
+};
