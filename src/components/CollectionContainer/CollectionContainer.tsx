@@ -14,16 +14,12 @@ import Pagination from '@/components/Pagination/Pagination';
 interface Props extends CardsResponseProps {
   collectionIds: string[];
   collection: Collection;
-  likedCollection?: Collection | null;
-  likedCards?: string[];
 }
 
 const CollectionContainer = ({
   cards,
   totalCount,
   page,
-  likedCollection,
-  likedCards = [],
   collectionIds,
   collection,
 }: Props) => {
@@ -196,8 +192,6 @@ const CollectionContainer = ({
           displayCards={displayCards}
           isSignedIn={isSignedIn}
           dataLoading={dataLoading}
-          likedCollection={likedCollection}
-          likedCards={likedCards}
         />
         {totalCardCount > selectedPageSize && (
           <Pagination
