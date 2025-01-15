@@ -5,7 +5,7 @@ import PokeBodyImage from '../../../public/assets/pokebody.png';
 import PokePowerImage from '../../../public/assets/pokepower.png';
 import { energyJSON } from '@/constants/energy';
 import styles from './CardContainer.module.scss';
-import { use, useMemo } from 'react';
+import { useMemo } from 'react';
 import Link from 'next/link';
 import { Collection } from '@/types/types';
 import AddToCollection from '@/components/AddToCollection/AddToCollection';

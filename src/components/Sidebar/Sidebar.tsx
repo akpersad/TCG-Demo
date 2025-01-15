@@ -1,8 +1,6 @@
 'use client';
 import { Dispatch, SetStateAction, useState } from 'react';
 import styles from './styles.module.scss';
-import { PokemonClient } from 'pokenode-ts';
-import { getPokeNames } from '@/app/utils/pokeApiClient';
 import EnergyCheckboxes from '@/components/EnergyCheckboxes/EnergyCheckboxes';
 import { energyJSON } from '@/constants/energy';
 import { GetCardsProps } from '@/types/types';
@@ -10,6 +8,7 @@ import SubtypesCheckboxes from '@/components/SubtypesCheckboxes/SubtypesCheckbox
 import { subtypes as SUBTYPES_JSON } from '@/constants/subtypes';
 import { convertBoolObjToParams } from '@/app/utils/app';
 import { Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
+import PokeNameSearch from '../PokeNameSearch/PokeNameSearch';
 
 interface GetCardsPropsWithReset extends GetCardsProps {
   resetPageCount?: boolean;
@@ -54,28 +53,12 @@ const Sidebar = ({
   paramName,
   paramSupertype,
 }: Props) => {
-  const api = new PokemonClient();
   const [searchTerm, setSearchTerm] = useState(paramName);
-  const [filteredData, setFilteredData] = useState<string[]>([]);
-  const [activeIndex, setActiveIndex] = useState(-1);
   const [searchEnergy, setSearchEnergy] = useState(energyBase(paramEnergy));
   const [searchSubtypes, setSearchSubtypes] = useState(
     subTypesWithParams(paramSubType)
   );
   const [supertype, setSupertype] = useState<Supertype[]>(paramSupertype || []);
-
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setSearchTerm(value);
-
-    if (value) {
-      getPokeNames(api, value).then((data) => {
-        setFilteredData(data.map((item) => item.name));
-      });
-    } else {
-      setFilteredData([]);
-    }
-  };
 
   const handleCheck = (
     jsonOBJ: {
@@ -100,26 +83,6 @@ const Sidebar = ({
     objSetter(updatedOBJ);
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'ArrowDown') {
-      setActiveIndex((prevIndex) => (prevIndex + 1) % filteredData.length);
-    } else if (event.key === 'ArrowUp') {
-      setActiveIndex(
-        (prevIndex) =>
-          (prevIndex - 1 + filteredData.length) % filteredData.length
-      );
-    } else if (event.key === 'Enter' && activeIndex >= 0) {
-      if (filteredData[activeIndex]) {
-        handleItemClick(filteredData[activeIndex]);
-      }
-    }
-  };
-
-  const handleItemClick = (item: string) => {
-    setSearchTerm(item);
-    setFilteredData([]);
-  };
-
   return (
     <aside
       id='default-sidebar'
@@ -130,38 +93,10 @@ const Sidebar = ({
         <ul className='space-y-2 font-medium'>
           <li>
             <div className='relative z-0 w-full mb-5 group'>
-              <input
-                type='text'
-                name='floating_name'
-                id='floating_name'
-                // className='capitalize w-full px-4 py-2 border border-gray-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
-                className='block capitalize py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer'
-                placeholder=' '
-                value={searchTerm}
-                onChange={handleSearch}
-                onKeyDown={handleKeyDown}
+              <PokeNameSearch
+                searchTerm={searchTerm}
+                setSearchTerm={setSearchTerm}
               />
-              <label
-                htmlFor='floating_name'
-                className='peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6'
-              >
-                Search Card Name
-              </label>
-              {filteredData.length > 0 && (
-                <ul className='capitalize absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg text-black'>
-                  {filteredData.map((item, index) => (
-                    <li
-                      key={index}
-                      className={`px-4 py-2 hover:bg-gray-100 cursor-pointer ${
-                        index === activeIndex ? 'bg-gray-200' : ''
-                      }`}
-                      onClick={() => handleItemClick(item)}
-                    >
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              )}
             </div>
           </li>
           <li>
@@ -179,6 +114,7 @@ const Sidebar = ({
               className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
               onChange={(e) => {
                 const options = e.target.selectedOptions;
+                // eslint-disable-next-line @typescript-eslint/no-unused-expressions
                 options.length > 0 &&
                   setSupertype(
                     Array.from(options).map(

@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { Collection } from '@/types/types';
+import Link from 'next/link';
 import { createNewCollectionRequest } from '@/app/client';
 import LoadingOverlay from '@/components/LoadingOverlay/LoadingOverlay';
 
@@ -73,10 +74,11 @@ const CollectionsContainer = ({ userCollections, userID }: Props) => {
     return () => {
       document.removeEventListener('keydown', handleEscKey);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isModalOpen]);
 
   return (
-    <div className='container mx-auto my-8'>
+    <div className='container sm:w-2/3 px-2 sm:mx-auto my-8'>
       <div className='flex justify-between mb-8'>
         <h2 className='text-2xl'>Collections Page</h2>
         {userCollectionsStateObject.length < 5 && userID && (
@@ -92,27 +94,30 @@ const CollectionsContainer = ({ userCollections, userID }: Props) => {
         <>
           <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6'>
             {userCollectionsStateObject.map((collection) => (
-              <div
-                key={collection._id}
+              <Link
+                href={`/collections/${collection._id}`}
                 className='border rounded-lg p-4 shadow-md bg-white dark:bg-gray-800'
+                key={collection._id}
               >
-                <h2 className='text-lg font-bold mb-2'>{collection.name}</h2>
-                {collection.description && (
-                  <p className='text-gray-600 dark:text-gray-400 mb-2 break-words'>
-                    {collection.description}
+                <div>
+                  <h2 className='text-lg font-bold mb-2'>{collection.name}</h2>
+                  {collection.description && (
+                    <p className='text-gray-600 dark:text-gray-400 mb-2 break-words'>
+                      {collection.description}
+                    </p>
+                  )}
+                  {collection.cardCount > 0 && (
+                    <p className='text-gray-500 dark:text-gray-300 mb-2'>
+                      {collection.cardCount}{' '}
+                      {collection.cardCount > 1 ? 'cards' : 'card'}
+                    </p>
+                  )}
+                  <p className='text-gray-500 dark:text-gray-300 mb-4'>
+                    Created on:{' '}
+                    {new Date(collection.createdAt).toLocaleDateString('en-US')}
                   </p>
-                )}
-                {collection.cardCount > 0 && (
-                  <p className='text-gray-500 dark:text-gray-300 mb-2'>
-                    {collection.cardCount}{' '}
-                    {collection.cardCount > 1 ? 'cards' : 'card'}
-                  </p>
-                )}
-                <p className='text-gray-500 dark:text-gray-300 mb-4'>
-                  Created on:{' '}
-                  {new Date(collection.createdAt).toLocaleDateString('en-US')}
-                </p>
-              </div>
+                </div>
+              </Link>
             ))}
           </div>
         </>

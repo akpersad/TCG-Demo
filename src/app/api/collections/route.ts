@@ -1,5 +1,4 @@
 import {
-  insertUser,
   insertCardIntoCollection,
   removeCardFromCollection,
   createNewCollection,
