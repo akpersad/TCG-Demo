@@ -1,7 +1,10 @@
 'use client';
 import { Collection } from '@/types/types';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
+import { Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
+import { subtypes as SUBTYPES_JSON } from '@/constants/subtypes';
 import PokeNameSearch from '@/components/PokeNameSearch/PokeNameSearch';
+import SubtypesMultiselect from '@/components/SubtypesMultiselect/SubtypesMultiselect';
 
 type Props = {
   userID?: string;
@@ -12,6 +15,38 @@ const AdvancedSearchContainer = ({ userID, collections }: Props) => {
   console.log('🚀 ~ Page ~ user:', userID);
   const [selectedCollection, setSelectedCollection] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [supertype, setSupertype] = useState<Supertype[]>([]);
+  const [subtypesForSearch, setSubtypesForSearch] = useState(SUBTYPES_JSON);
+  const [searchSubtypes, setSearchSubtypes] = useState<string[]>([]);
+
+  const handleCheckForMultiSelect = (
+    searchJSONObj: {
+      name: string;
+      checked: boolean;
+    }[],
+    searchJSONSetter: Dispatch<
+      SetStateAction<
+        {
+          name: string;
+          checked: boolean;
+        }[]
+      >
+    >,
+    stringSetter: Dispatch<SetStateAction<string[]>>,
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const options = e.target.selectedOptions;
+    const selectedStrings = Array.from(options).map((option) => option.value);
+
+    stringSetter(selectedStrings);
+    const updatedOBJ = [...searchJSONObj];
+
+    updatedOBJ.forEach((item) => {
+      item.checked = selectedStrings.includes(item.name);
+    });
+
+    searchJSONSetter(updatedOBJ);
+  };
 
   return (
     <div className='advanced-search-container container mx-auto my-8'>
@@ -42,29 +77,80 @@ const AdvancedSearchContainer = ({ userID, collections }: Props) => {
           </div>
         )}
 
+        {/* Card Name */}
         <div className='item relative z-0 w-full my-5 pt-4 group'>
           <PokeNameSearch
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
           />
         </div>
+
+        {/* Supertype */}
         <div className='item relative z-0 w-full my-5 pt-5 group'>
-          Supertype
+          <label
+            htmlFor='supertype_multiple'
+            className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
+          >
+            Select Card Types
+          </label>
+          <select
+            multiple
+            id='supertype_multiple'
+            size={3}
+            value={supertype}
+            className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+            onChange={(e) => {
+              const options = e.target.selectedOptions;
+              setSupertype(
+                Array.from(options).map((option) => option.value as Supertype)
+              );
+            }}
+          >
+            <option value='Pokemon'>Pokémon</option>
+            <option value='Trainer'>Trainer</option>
+            <option value='Energy'>Energy</option>
+          </select>
         </div>
-        <div className='item relative z-0 w-full my-5 pt-5 group'>Subtype</div>
+
+        {/* Subtype */}
+        <div className='item relative z-0 w-full my-5 pt-5 group'>
+          <SubtypesMultiselect
+            subtypesForSearch={subtypesForSearch}
+            setSubtypesForSearch={setSubtypesForSearch}
+            searchSubtypes={searchSubtypes}
+            setSearchSubtypes={setSearchSubtypes}
+            handleCheckForMultiSelect={handleCheckForMultiSelect}
+          />
+        </div>
+
+        {/* Types */}
         <div className='item relative z-0 w-full my-5 pt-5 group'>Type</div>
+
+        {/* HP Range */}
         <div className='item relative z-0 w-full my-5 pt-5 group'>HP Range</div>
+
+        {/* Weaknesses */}
         <div className='item relative z-0 w-full my-5 pt-5 group'>
           Weaknesses
         </div>
+
+        {/* Resistances */}
         <div className='item relative z-0 w-full my-5 pt-5 group'>
           Resistances
         </div>
+
+        {/* Set Name */}
         <div className='item relative z-0 w-full my-5 pt-5 group'>Set Name</div>
+
+        {/* Series Name */}
         <div className='item relative z-0 w-full my-5 pt-5 group'>
           Series Name
         </div>
+
+        {/* Artist */}
         <div className='item relative z-0 w-full my-5 pt-5 group'>Artist</div>
+
+        {/* Rarity */}
         <div className='item relative z-0 w-full my-5 pt-5 group'>Rarity</div>
       </div>
     </div>

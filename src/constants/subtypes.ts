@@ -64,10 +64,6 @@ export const subtypes = [
     checked: false,
   },
   {
-    name: 'Pokemon Tool',
-    checked: false,
-  },
-  {
     name: 'Prime',
     checked: false,
   },
