@@ -4,7 +4,7 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import { Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
 import { subtypes as SUBTYPES_JSON } from '@/constants/subtypes';
 import PokeNameSearch from '@/components/PokeNameSearch/PokeNameSearch';
-import SubtypesMultiselect from '@/components/SubtypesMultiselect/SubtypesMultiselect';
+import MultiselectInput from '@/components/MultiselectInput/MultiselectInput';
 import EnergyCheckboxes from '@/components/EnergyCheckboxes/EnergyCheckboxes';
 import { energyJSON } from '@/constants/energy';
 import { StaticImageData } from 'next/image';
@@ -12,6 +12,15 @@ import { StaticImageData } from 'next/image';
 type Props = {
   userID?: string;
   collections?: Collection[];
+  setNames: {
+    name: string;
+    id: string;
+    checked: boolean;
+  }[];
+  seriesNames: {
+    name: string;
+    checked: boolean;
+  }[];
 };
 
 const convertEnergyObject = (
@@ -23,7 +32,12 @@ const convertEnergyObject = (
   }));
 };
 
-const AdvancedSearchContainer = ({ userID, collections }: Props) => {
+const AdvancedSearchContainer = ({
+  userID,
+  collections,
+  setNames,
+  seriesNames,
+}: Props) => {
   console.log('🚀 ~ Page ~ user:', userID);
   const [selectedCollection, setSelectedCollection] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
@@ -35,6 +49,10 @@ const AdvancedSearchContainer = ({ userID, collections }: Props) => {
   const [resistances, setResistances] = useState(
     convertEnergyObject(energyJSON)
   );
+  const [searchSets, setSearchSets] = useState(setNames);
+  const [searchSetStrings, setSearchSetStrings] = useState<string[]>([]);
+  const [searchSeries, setSearchSeries] = useState(seriesNames);
+  const [searchSeriesStrings, setSearchSeriesStrings] = useState<string[]>([]);
 
   const handleCheckForMultiSelect = (
     searchJSONObj: {
@@ -154,12 +172,13 @@ const AdvancedSearchContainer = ({ userID, collections }: Props) => {
 
         {/* Subtype */}
         <div className='item relative z-0 w-full my-5 pt-5 group'>
-          <SubtypesMultiselect
-            subtypesForSearch={subtypesForSearch}
-            setSubtypesForSearch={setSubtypesForSearch}
-            searchSubtypes={searchSubtypes}
-            setSearchSubtypes={setSearchSubtypes}
+          <MultiselectInput
+            objectForSearch={subtypesForSearch}
+            setObjectForSearch={setSubtypesForSearch}
+            searchStrings={searchSubtypes}
+            setSearchStrings={setSearchSubtypes}
             handleCheckForMultiSelect={handleCheckForMultiSelect}
+            title='Select Subtypes'
           />
         </div>
 
@@ -240,11 +259,29 @@ const AdvancedSearchContainer = ({ userID, collections }: Props) => {
         </div>
 
         {/* Set Name */}
-        <div className='item relative z-0 w-full my-5 pt-5 group'>Set Name</div>
+        <div className='item relative z-0 w-full my-5 pt-5 group'>
+          <MultiselectInput
+            objectForSearch={searchSets}
+            // @ts-expect-error Typing issue because of the way the object is structured
+            setObjectForSearch={setSearchSets}
+            searchStrings={searchSetStrings}
+            setSearchStrings={setSearchSetStrings}
+            handleCheckForMultiSelect={handleCheckForMultiSelect}
+            title='Sets'
+            linesToShow={10}
+          />
+        </div>
 
         {/* Series Name */}
         <div className='item relative z-0 w-full my-5 pt-5 group'>
-          Series Name
+          <MultiselectInput
+            objectForSearch={searchSeries}
+            setObjectForSearch={setSearchSeries}
+            searchStrings={searchSeriesStrings}
+            setSearchStrings={setSearchSeriesStrings}
+            handleCheckForMultiSelect={handleCheckForMultiSelect}
+            title='Series'
+          />
         </div>
 
         {/* Artist */}

@@ -1,4 +1,4 @@
-import { GetCardsProps, ParamsProps } from '@/types/types';
+import { GetCardsProps, GroupedSet, ParamsProps } from '@/types/types';
 import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
 
 const queryBuilder = (queries: string[]): string => {
@@ -121,4 +121,45 @@ export const getSetsByQuery = async () => {
 export const getAllSets = async () => {
   const sets = await PokemonTCG.getAllSets();
   return sets;
+};
+
+export const sortAndGroupSets = (sets: PokemonTCG.Set[]) => {
+  const groupedSets: GroupedSet[] = [];
+  sets.forEach((set) => {
+    const existingGroup = groupedSets.find(
+      (group) => group.series === set.series
+    );
+    if (existingGroup) {
+      existingGroup.sets.push(set);
+      if (set.releaseDate < existingGroup.earliestReleaseDate) {
+        existingGroup.earliestReleaseDate = set.releaseDate;
+      }
+    } else {
+      groupedSets.push({
+        series: set.series,
+        sets: [set],
+        earliestReleaseDate: set.releaseDate,
+      });
+    }
+  });
+
+  groupedSets.forEach((group) => {
+    group.sets.sort((a, b) => (a.releaseDate > b.releaseDate ? -1 : 1));
+  });
+
+  return groupedSets.sort((a, b) =>
+    a.earliestReleaseDate > b.earliestReleaseDate ? -1 : 1
+  );
+};
+
+export const getSetAndSeriesNames = (sortedSets: GroupedSet[]) => {
+  const seriesNames = sortedSets.map((set) => {
+    return { name: set.series, checked: false };
+  });
+  const setNames = sortedSets.flatMap((seriesSet) => {
+    return seriesSet.sets.map((set) => {
+      return { name: set.name, id: set.id, checked: false };
+    });
+  });
+  return { seriesNames, setNames };
 };
