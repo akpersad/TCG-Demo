@@ -175,9 +175,6 @@ const AdvancedSearchContainer = ({ userID, collections }: Props) => {
           />
         </div>
 
-        {/* HP Range */}
-        <div className='item relative z-0 w-full my-5 pt-5 group'>HP Range</div>
-
         {/* Weaknesses */}
         <div className='item relative z-0 w-full my-5 pt-5 group'>
           <h3 className='mb-4'>Weaknessess</h3>
@@ -200,6 +197,46 @@ const AdvancedSearchContainer = ({ userID, collections }: Props) => {
             displayAsRow
             type='resistance'
           />
+        </div>
+
+        {/* HP Range */}
+        <div className='item relative z-0 w-full my-5 pt-5 group'>
+          <div className='flex'>
+            <div className='relative z-0 w-1/2 mb-5 group'>
+              <input
+                onChange={(e) => console.log(e.target.value)}
+                type='number'
+                name='floating_min_hp'
+                id='floating_min_hp'
+                className='block py-2.5 px-0 w-1/2 text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer'
+                placeholder=' '
+                required
+              />
+              <label
+                htmlFor='floating_min_hp'
+                className='peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6'
+              >
+                Min HP
+              </label>
+            </div>
+            <div className='relative z-0 w-1/2 mb-5 group'>
+              <input
+                onChange={(e) => console.log(e.target.value)}
+                type='number'
+                name='floating_max_hp'
+                id='floating_max_hp'
+                className='block py-2.5 px-0 w-1/2 text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer'
+                placeholder=' '
+                required
+              />
+              <label
+                htmlFor='floating_max_hp'
+                className='peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6'
+              >
+                Max HP
+              </label>
+            </div>
+          </div>
         </div>
 
         {/* Set Name */}
