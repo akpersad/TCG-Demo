@@ -1,33 +1,14 @@
 'use client';
+import { inputProps } from '@/types/types';
 import { Dispatch, SetStateAction, useMemo } from 'react';
 
 type Props = {
   advancedSearch?: boolean;
-  searchSubtypes: {
-    name: string;
-    checked: boolean;
-  }[];
-  setSearchSubtypes: Dispatch<
-    SetStateAction<
-      {
-        name: string;
-        checked: boolean;
-      }[]
-    >
-  >;
+  searchSubtypes: inputProps[];
+  setSearchSubtypes: Dispatch<SetStateAction<inputProps[]>>;
   handleCheck: (
-    energyObj: {
-      name: string;
-      checked: boolean;
-    }[],
-    objSetter: Dispatch<
-      SetStateAction<
-        {
-          name: string;
-          checked: boolean;
-        }[]
-      >
-    >,
+    energyObj: inputProps[],
+    objSetter: Dispatch<SetStateAction<inputProps[]>>,
     e: React.ChangeEvent<HTMLInputElement>
   ) => void;
 };

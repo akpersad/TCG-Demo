@@ -163,3 +163,14 @@ export const getSetAndSeriesNames = (sortedSets: GroupedSet[]) => {
   });
   return { seriesNames, setNames };
 };
+
+export const getAllRarities = async () => {
+  const rarities = await PokemonTCG.getRarities();
+  return rarities;
+};
+
+export const transformRarities = (rarities: PokemonTCG.Rarity[]) => {
+  return rarities.map((rarity) => {
+    return { name: rarity, checked: false };
+  });
+};

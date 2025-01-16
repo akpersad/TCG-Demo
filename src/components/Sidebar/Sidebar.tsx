@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction, useState } from 'react';
 import styles from './styles.module.scss';
 import EnergyCheckboxes from '@/components/EnergyCheckboxes/EnergyCheckboxes';
 import { energyJSON } from '@/constants/energy';
-import { GetCardsProps } from '@/types/types';
+import { GetCardsProps, inputProps } from '@/types/types';
 import SubtypesCheckboxes from '@/components/SubtypesCheckboxes/SubtypesCheckboxes';
 import { subtypes as SUBTYPES_JSON } from '@/constants/subtypes';
 import { convertBoolObjToParams } from '@/app/utils/app';
@@ -61,18 +61,8 @@ const Sidebar = ({
   const [supertype, setSupertype] = useState<Supertype[]>(paramSupertype || []);
 
   const handleCheck = (
-    jsonOBJ: {
-      name: string;
-      checked: boolean;
-    }[],
-    objSetter: Dispatch<
-      SetStateAction<
-        {
-          name: string;
-          checked: boolean;
-        }[]
-      >
-    >,
+    jsonOBJ: inputProps[],
+    objSetter: Dispatch<SetStateAction<inputProps[]>>,
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     const foundIndex = jsonOBJ.findIndex(

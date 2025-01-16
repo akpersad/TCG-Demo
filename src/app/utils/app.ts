@@ -1,12 +1,7 @@
-import { GetCardsProps } from '@/types/types';
+import { GetCardsProps, inputProps } from '@/types/types';
 import { Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
 
-type Props = {
-  name: string;
-  checked: boolean;
-};
-
-export const convertBoolObjToParams = (boolObj: Props[]) => {
+export const convertBoolObjToParams = (boolObj: inputProps[]) => {
   const names = boolObj.filter((item) => item.checked).map((item) => item.name);
   return names.length > 0 ? names : undefined;
 };

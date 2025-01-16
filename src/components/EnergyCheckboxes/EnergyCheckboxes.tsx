@@ -1,34 +1,15 @@
 'use client';
 import { energyJSON } from '@/constants/energy';
+import { inputProps } from '@/types/types';
 import Image from 'next/image';
 import { Dispatch, SetStateAction } from 'react';
 
 type Props = {
-  energies: {
-    name: string;
-    checked: boolean;
-  }[];
-  setEnergies: Dispatch<
-    SetStateAction<
-      {
-        name: string;
-        checked: boolean;
-      }[]
-    >
-  >;
+  energies: inputProps[];
+  setEnergies: Dispatch<SetStateAction<inputProps[]>>;
   handleCheck: (
-    energyObj: {
-      name: string;
-      checked: boolean;
-    }[],
-    objSetter: Dispatch<
-      SetStateAction<
-        {
-          name: string;
-          checked: boolean;
-        }[]
-      >
-    >,
+    energyObj: inputProps[],
+    objSetter: Dispatch<SetStateAction<inputProps[]>>,
     e: React.ChangeEvent<HTMLInputElement>
   ) => void;
   displayAsRow?: boolean;

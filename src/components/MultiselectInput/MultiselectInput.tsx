@@ -1,41 +1,14 @@
+import { inputProps } from '@/types/types';
 import { Dispatch, SetStateAction } from 'react';
 
 type Props = {
-  objectForSearch: {
-    name: string;
-    checked: boolean;
-    id?: string;
-  }[];
-  setObjectForSearch: Dispatch<
-    SetStateAction<
-      | {
-          name: string;
-          checked: boolean;
-        }[]
-      | {
-          name: string;
-          checked: boolean;
-          id: string;
-        }[]
-    >
-  >;
+  objectForSearch: inputProps[];
+  setObjectForSearch: Dispatch<SetStateAction<inputProps[]>>;
   searchStrings: string[];
   setSearchStrings: Dispatch<SetStateAction<string[]>>;
   handleCheckForMultiSelect: (
-    searchJSONObj: {
-      name: string;
-      checked: boolean;
-      id?: string;
-    }[],
-    searchJSONSetter: Dispatch<
-      SetStateAction<
-        {
-          name: string;
-          checked: boolean;
-          id?: string;
-        }[]
-      >
-    >,
+    searchJSONObj: inputProps[],
+    searchJSONSetter: Dispatch<SetStateAction<inputProps[]>>,
     stringSetter: Dispatch<SetStateAction<string[]>>,
     e: React.ChangeEvent<HTMLSelectElement>
   ) => void;

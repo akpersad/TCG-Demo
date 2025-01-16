@@ -1,5 +1,5 @@
 'use client';
-import { Collection } from '@/types/types';
+import { Collection, inputProps } from '@/types/types';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
 import { subtypes as SUBTYPES_JSON } from '@/constants/subtypes';
@@ -12,15 +12,9 @@ import { StaticImageData } from 'next/image';
 type Props = {
   userID?: string;
   collections?: Collection[];
-  setNames: {
-    name: string;
-    id: string;
-    checked: boolean;
-  }[];
-  seriesNames: {
-    name: string;
-    checked: boolean;
-  }[];
+  setNames: inputProps[];
+  seriesNames: inputProps[];
+  rarities: inputProps[];
 };
 
 const convertEnergyObject = (
@@ -37,6 +31,7 @@ const AdvancedSearchContainer = ({
   collections,
   setNames,
   seriesNames,
+  rarities,
 }: Props) => {
   console.log('🚀 ~ Page ~ user:', userID);
   const [selectedCollection, setSelectedCollection] = useState('');
@@ -56,20 +51,12 @@ const AdvancedSearchContainer = ({
   const [searchSeries, setSearchSeries] = useState(seriesNames);
   const [searchSeriesStrings, setSearchSeriesStrings] = useState<string[]>([]);
   const [searchArtist, setSearchArtist] = useState<string>('');
+  const [searchRarity, setSearchRarity] = useState(rarities);
+  const [raritiesStrings, setRaritiesStrings] = useState<string[]>([]);
 
   const handleCheckForMultiSelect = (
-    searchJSONObj: {
-      name: string;
-      checked: boolean;
-    }[],
-    searchJSONSetter: Dispatch<
-      SetStateAction<
-        {
-          name: string;
-          checked: boolean;
-        }[]
-      >
-    >,
+    searchJSONObj: inputProps[],
+    searchJSONSetter: Dispatch<SetStateAction<inputProps[]>>,
     stringSetter: Dispatch<SetStateAction<string[]>>,
     e: React.ChangeEvent<HTMLSelectElement>
   ) => {
@@ -87,18 +74,8 @@ const AdvancedSearchContainer = ({
   };
 
   const handleCheck = (
-    jsonOBJ: {
-      name: string;
-      checked: boolean;
-    }[],
-    objSetter: Dispatch<
-      SetStateAction<
-        {
-          name: string;
-          checked: boolean;
-        }[]
-      >
-    >,
+    jsonOBJ: inputProps[],
+    objSetter: Dispatch<SetStateAction<inputProps[]>>,
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     const foundIndex = jsonOBJ.findIndex(
@@ -267,7 +244,6 @@ const AdvancedSearchContainer = ({
         <div className='item relative z-0 w-full my-5 pt-5 group'>
           <MultiselectInput
             objectForSearch={searchSets}
-            // @ts-expect-error Typing issue because of the way the object is structured
             setObjectForSearch={setSearchSets}
             searchStrings={searchSetStrings}
             setSearchStrings={setSearchSetStrings}
@@ -312,7 +288,17 @@ const AdvancedSearchContainer = ({
         </div>
 
         {/* Rarity */}
-        <div className='item relative z-0 w-full my-5 pt-5 group'>Rarity</div>
+        <div className='item relative z-0 w-full my-5 pt-5 group'>
+          <MultiselectInput
+            objectForSearch={searchRarity}
+            setObjectForSearch={setSearchRarity}
+            searchStrings={raritiesStrings}
+            setSearchStrings={setRaritiesStrings}
+            handleCheckForMultiSelect={handleCheckForMultiSelect}
+            title='Rarity'
+            linesToShow={8}
+          />
+        </div>
       </div>
     </div>
   );

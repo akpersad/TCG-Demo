@@ -56,3 +56,9 @@ export type CollectionItem = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type inputProps = {
+  name: string;
+  checked: boolean;
+  id?: string;
+};
