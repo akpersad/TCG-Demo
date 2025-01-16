@@ -49,10 +49,13 @@ const AdvancedSearchContainer = ({
   const [resistances, setResistances] = useState(
     convertEnergyObject(energyJSON)
   );
+  const [hpMin, setHPMin] = useState<number>();
+  const [hpMax, setHPMax] = useState<number>();
   const [searchSets, setSearchSets] = useState(setNames);
   const [searchSetStrings, setSearchSetStrings] = useState<string[]>([]);
   const [searchSeries, setSearchSeries] = useState(seriesNames);
   const [searchSeriesStrings, setSearchSeriesStrings] = useState<string[]>([]);
+  const [searchArtist, setSearchArtist] = useState<string>('');
 
   const handleCheckForMultiSelect = (
     searchJSONObj: {
@@ -107,7 +110,7 @@ const AdvancedSearchContainer = ({
   };
 
   return (
-    <div className='advanced-search-container container mx-auto my-8'>
+    <div className='advanced-search-container container mx-4 sm:mx-auto my-8'>
       {/* <div className='sm:w-2/3 mx-auto divide-y-2 divide-gray-300 mt-12'> */}
       <div className='sm:w-2/3 mx-auto mt-12'>
         {/* Collections */}
@@ -223,8 +226,9 @@ const AdvancedSearchContainer = ({
           <div className='flex'>
             <div className='relative z-0 w-1/2 mb-5 group'>
               <input
-                onChange={(e) => console.log(e.target.value)}
+                onChange={(e) => setHPMin(parseInt(e.target.value, 10))}
                 type='number'
+                value={hpMin}
                 name='floating_min_hp'
                 id='floating_min_hp'
                 className='block py-2.5 px-0 w-1/2 text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer'
@@ -240,8 +244,9 @@ const AdvancedSearchContainer = ({
             </div>
             <div className='relative z-0 w-1/2 mb-5 group'>
               <input
-                onChange={(e) => console.log(e.target.value)}
+                onChange={(e) => setHPMax(parseInt(e.target.value, 10))}
                 type='number'
+                value={hpMax}
                 name='floating_max_hp'
                 id='floating_max_hp'
                 className='block py-2.5 px-0 w-1/2 text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer'
@@ -285,7 +290,26 @@ const AdvancedSearchContainer = ({
         </div>
 
         {/* Artist */}
-        <div className='item relative z-0 w-full my-5 pt-5 group'>Artist</div>
+        <div className='item relative z-0 w-full my-5 pt-5 group'>
+          <div className='relative z-0 w-full sm:w-3/4 mb-5 group'>
+            <input
+              onChange={(e) => setSearchArtist(e.target.value)}
+              type='text'
+              value={searchArtist}
+              name='floating_artist'
+              id='floating_artist'
+              className='block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer'
+              placeholder=' '
+              required
+            />
+            <label
+              htmlFor='floating_artist'
+              className='peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6'
+            >
+              Artist
+            </label>
+          </div>
+        </div>
 
         {/* Rarity */}
         <div className='item relative z-0 w-full my-5 pt-5 group'>Rarity</div>
