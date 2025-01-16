@@ -5,10 +5,22 @@ import { Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
 import { subtypes as SUBTYPES_JSON } from '@/constants/subtypes';
 import PokeNameSearch from '@/components/PokeNameSearch/PokeNameSearch';
 import SubtypesMultiselect from '@/components/SubtypesMultiselect/SubtypesMultiselect';
+import EnergyCheckboxes from '@/components/EnergyCheckboxes/EnergyCheckboxes';
+import { energyJSON } from '@/constants/energy';
+import { StaticImageData } from 'next/image';
 
 type Props = {
   userID?: string;
   collections?: Collection[];
+};
+
+const convertEnergyObject = (
+  energies: { name: string; image: StaticImageData }[]
+) => {
+  return energies.map((item) => ({
+    name: item.name,
+    checked: false,
+  }));
 };
 
 const AdvancedSearchContainer = ({ userID, collections }: Props) => {
@@ -18,6 +30,11 @@ const AdvancedSearchContainer = ({ userID, collections }: Props) => {
   const [supertype, setSupertype] = useState<Supertype[]>([]);
   const [subtypesForSearch, setSubtypesForSearch] = useState(SUBTYPES_JSON);
   const [searchSubtypes, setSearchSubtypes] = useState<string[]>([]);
+  const [types, setTypes] = useState(convertEnergyObject(energyJSON));
+  const [weaknesses, setWeaknesses] = useState(convertEnergyObject(energyJSON));
+  const [resistances, setResistances] = useState(
+    convertEnergyObject(energyJSON)
+  );
 
   const handleCheckForMultiSelect = (
     searchJSONObj: {
@@ -46,6 +63,29 @@ const AdvancedSearchContainer = ({ userID, collections }: Props) => {
     });
 
     searchJSONSetter(updatedOBJ);
+  };
+
+  const handleCheck = (
+    jsonOBJ: {
+      name: string;
+      checked: boolean;
+    }[],
+    objSetter: Dispatch<
+      SetStateAction<
+        {
+          name: string;
+          checked: boolean;
+        }[]
+      >
+    >,
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const foundIndex = jsonOBJ.findIndex(
+      (item) => item.name === e.target.value
+    );
+    const updatedOBJ = [...jsonOBJ];
+    updatedOBJ[foundIndex].checked = e.target.checked;
+    objSetter(updatedOBJ);
   };
 
   return (
@@ -124,19 +164,42 @@ const AdvancedSearchContainer = ({ userID, collections }: Props) => {
         </div>
 
         {/* Types */}
-        <div className='item relative z-0 w-full my-5 pt-5 group'>Type</div>
+        <div className='item relative z-0 w-full my-5 pt-5 group'>
+          <h3 className='mb-4'>Types</h3>
+          <EnergyCheckboxes
+            energies={types}
+            setEnergies={setTypes}
+            handleCheck={handleCheck}
+            displayAsRow
+            type='type'
+          />
+        </div>
 
         {/* HP Range */}
         <div className='item relative z-0 w-full my-5 pt-5 group'>HP Range</div>
 
         {/* Weaknesses */}
         <div className='item relative z-0 w-full my-5 pt-5 group'>
-          Weaknesses
+          <h3 className='mb-4'>Weaknessess</h3>
+          <EnergyCheckboxes
+            energies={weaknesses}
+            setEnergies={setWeaknesses}
+            handleCheck={handleCheck}
+            displayAsRow
+            type='weakness'
+          />
         </div>
 
         {/* Resistances */}
         <div className='item relative z-0 w-full my-5 pt-5 group'>
-          Resistances
+          <h3 className='mb-4'>Resistances</h3>
+          <EnergyCheckboxes
+            energies={resistances}
+            setEnergies={setResistances}
+            handleCheck={handleCheck}
+            displayAsRow
+            type='resistance'
+          />
         </div>
 
         {/* Set Name */}

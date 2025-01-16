@@ -31,15 +31,28 @@ type Props = {
     >,
     e: React.ChangeEvent<HTMLInputElement>
   ) => void;
+  displayAsRow?: boolean;
+  type?: string;
 };
 
-const EnergyCheckboxes = ({ energies, setEnergies, handleCheck }: Props) => {
+const EnergyCheckboxes = ({
+  energies,
+  setEnergies,
+  handleCheck,
+  displayAsRow = false,
+  type = 'energy',
+}: Props) => {
   return (
-    <>
+    <div className={`${displayAsRow ? 'flex flex-wrap' : ''}`}>
       {energyJSON.map((item, index) => (
-        <div key={`${item.name}-${index}`} className='flex items-center mb-4'>
+        <div
+          key={`${item.name}-${index}-${type}`}
+          className={`flex items-center mb-4 ${
+            displayAsRow ? 'mr-4 last-of-type:mr-0' : ''
+          }`}
+        >
           <input
-            id={`${item.name}-checkbox`}
+            id={`${item.name}-checkbox-${type}`}
             type='checkbox'
             value={item.name}
             checked={
@@ -49,7 +62,7 @@ const EnergyCheckboxes = ({ energies, setEnergies, handleCheck }: Props) => {
             onChange={(e) => handleCheck(energies, setEnergies, e)}
           />
           <label
-            htmlFor={`${item.name}-checkbox`}
+            htmlFor={`${item.name}-checkbox-${type}`}
             className='flex ms-2 text-sm font-medium text-gray-900 dark:text-gray-300'
           >
             <Image src={item.image} alt={item.name} width={20} height={20} />
@@ -57,7 +70,7 @@ const EnergyCheckboxes = ({ energies, setEnergies, handleCheck }: Props) => {
           </label>
         </div>
       ))}
-    </>
+    </div>
   );
 };
 
