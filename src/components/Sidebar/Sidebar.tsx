@@ -9,6 +9,7 @@ import { subtypes as SUBTYPES_JSON } from '@/constants/subtypes';
 import { convertBoolObjToParams } from '@/app/utils/app';
 import { Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
 import PokeNameSearch from '../PokeNameSearch/PokeNameSearch';
+import Link from 'next/link';
 
 interface GetCardsPropsWithReset extends GetCardsProps {
   resetPageCount?: boolean;
@@ -134,6 +135,14 @@ const Sidebar = ({
               handleCheck={handleCheck}
             />
           </li>
+        </ul>
+        <ul className='pt-4 mt-4 space-y-2 font-medium border-t border-gray-200 dark:border-gray-700'>
+          <Link
+            href='/search/advanced-search'
+            className='text-blue-500 hover:text-blue-700 underline'
+          >
+            Advanced Search
+          </Link>
         </ul>
         <ul className='pt-4 mt-4 space-y-2 font-medium border-t border-gray-200 dark:border-gray-700'>
           <li>
