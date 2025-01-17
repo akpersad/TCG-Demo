@@ -46,8 +46,8 @@ const AddToCollection = ({ collections, cardData }: Props) => {
 
   return (
     <>
-      <Toaster />
       <div className='my-6 pt-6 relative'>
+        <Toaster />
         {dataLoading && <LoadingOverlay />}
         <h4 className='text-xl'>Add to Collection</h4>
         <div className='flex justify-between flex-wrap mt-4'>

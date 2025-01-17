@@ -1,11 +1,11 @@
-import { GetCardsProps, ParamsProps } from '@/types/types';
+import { GetCardsProps, GroupedSet, ParamsProps } from '@/types/types';
 import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
 
 const queryBuilder = (queries: string[]): string => {
   const sanitizedQueries = queries.filter((item) => item);
   const combiner =
     sanitizedQueries.filter((item) => item).length > 1 ? ' AND ' : ' ';
-  return sanitizedQueries.join(combiner);
+  return sanitizedQueries.map((item) => `(${item})`).join(combiner);
 };
 
 const idCombinor = (ids: string[]): string => {
@@ -41,6 +41,19 @@ const getRequestURLForExtraFields = async (params: ParamsProps) => {
   };
 };
 
+const combineSameParams = ({
+  paramName,
+  param,
+}: {
+  paramName: string;
+  param?: string[];
+}) => {
+  if (!param || param.length === 0) {
+    return '';
+  }
+  return param.map((item) => `${paramName}:"${item}"`).join(' OR ');
+};
+
 export const getCardsByName = async ({
   pokemonName,
   searchEnergy,
@@ -52,34 +65,71 @@ export const getCardsByName = async ({
   artist,
   setId,
   ids,
+  setIdArray,
+  series,
+  weaknesses,
+  resistances,
+  hpMin,
+  hpMax,
+  rarities,
 }: GetCardsProps) => {
   const multiIds = getCardsByIDs(ids);
   const cardStr =
     pokemonName && pokemonName.length > 0 ? `name:${pokemonName}` : '';
   const artistStr = artist && artist.length > 0 ? `artist:"${artist}"` : '';
   const setIdStr = setId && setId.length > 0 ? `set.id:${setId}` : '';
-  const queryArray = [multiIds, cardStr, artistStr, setIdStr];
+  const energyTypeStr = combineSameParams({
+    paramName: 'types',
+    param: searchEnergy,
+  });
+  const subtypesStr = combineSameParams({
+    paramName: 'subtypes',
+    param: searchSubtypes,
+  });
+  const supertypeStr = combineSameParams({
+    paramName: 'supertype',
+    param: supertype,
+  });
+  const setsIdArrayStr = combineSameParams({
+    paramName: 'set.id',
+    param: setIdArray,
+  });
+  const seriesStr = combineSameParams({
+    paramName: 'set.series',
+    param: series,
+  });
+  const weaknessesStr = combineSameParams({
+    paramName: 'weaknesses.type',
+    param: weaknesses,
+  });
+  const resistancesStr = combineSameParams({
+    paramName: 'resistances.type',
+    param: resistances,
+  });
+  const hpStr =
+    hpMin || hpMax
+      ? `hp:[${hpMin ? hpMin : '*'} TO ${hpMax ? hpMax : '*'}]`
+      : '';
+  const raritiesStr = combineSameParams({
+    paramName: 'rarity',
+    param: rarities,
+  });
 
-  if (searchEnergy) {
-    const energyStr = searchEnergy
-      .map((energy) => `types:${energy}`)
-      .join(' OR ');
-    queryArray.push(`(${energyStr})`);
-  }
-
-  if (searchSubtypes) {
-    const subtypeStr = searchSubtypes
-      .map((subtype) => `subtypes:${subtype}`)
-      .join(' OR ');
-    queryArray.push(`(${subtypeStr})`);
-  }
-
-  if (supertype && supertype.length > 0) {
-    const supertypeStr = supertype
-      .map((type) => `supertype:${type}`)
-      .join(' OR ');
-    queryArray.push(`(${supertypeStr})`);
-  }
+  const queryArray = [
+    multiIds,
+    cardStr,
+    artistStr,
+    setIdStr,
+    energyTypeStr,
+    subtypesStr,
+    supertypeStr,
+    setsIdArrayStr,
+    seriesStr,
+    weaknessesStr,
+    resistancesStr,
+    hpStr,
+    raritiesStr,
+  ];
 
   const cards = await PokemonTCG.findCardsByQueries({
     q: queryBuilder(queryArray),
@@ -121,4 +171,56 @@ export const getSetsByQuery = async () => {
 export const getAllSets = async () => {
   const sets = await PokemonTCG.getAllSets();
   return sets;
+};
+
+export const sortAndGroupSets = (sets: PokemonTCG.Set[]) => {
+  const groupedSets: GroupedSet[] = [];
+  sets.forEach((set) => {
+    const existingGroup = groupedSets.find(
+      (group) => group.series === set.series
+    );
+    if (existingGroup) {
+      existingGroup.sets.push(set);
+      if (set.releaseDate < existingGroup.earliestReleaseDate) {
+        existingGroup.earliestReleaseDate = set.releaseDate;
+      }
+    } else {
+      groupedSets.push({
+        series: set.series,
+        sets: [set],
+        earliestReleaseDate: set.releaseDate,
+      });
+    }
+  });
+
+  groupedSets.forEach((group) => {
+    group.sets.sort((a, b) => (a.releaseDate > b.releaseDate ? -1 : 1));
+  });
+
+  return groupedSets.sort((a, b) =>
+    a.earliestReleaseDate > b.earliestReleaseDate ? -1 : 1
+  );
+};
+
+export const getSetAndSeriesNames = (sortedSets: GroupedSet[]) => {
+  const seriesNames = sortedSets.map((set) => {
+    return { name: set.series, checked: false };
+  });
+  const setNames = sortedSets.flatMap((seriesSet) => {
+    return seriesSet.sets.map((set) => {
+      return { name: set.name, id: set.id, checked: false };
+    });
+  });
+  return { seriesNames, setNames };
+};
+
+export const getAllRarities = async () => {
+  const rarities = await PokemonTCG.getRarities();
+  return rarities;
+};
+
+export const transformRarities = (rarities: PokemonTCG.Rarity[]) => {
+  return rarities.map((rarity) => {
+    return { name: rarity, checked: false };
+  });
 };

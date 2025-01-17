@@ -7,7 +7,7 @@ import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
 import { getCardsByName } from '@/app/utils/tcgClient';
 import { CardsResponseProps, Collection, GetCardsProps } from '@/types/types';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { filterParams } from '@/app/utils/app';
+import { filterParams, filterValidParams } from '@/app/utils/app';
 import { useUser } from '@clerk/nextjs';
 import { Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
 
@@ -32,20 +32,6 @@ const CardsContainer = ({
   const [currentPage, setCurrentPage] = useState<number>(page);
   const [totalCardCount, setTotalCardCount] = useState<number>(totalCount);
   const [dataLoading, setDataLoading] = useState<boolean>(false);
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const filterValidParams = (params: Record<string, any>) => {
-    return Object.fromEntries(
-      Object.entries(params).filter(
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        ([_, value]) =>
-          value !== undefined &&
-          value !== null &&
-          value !== '' &&
-          (Array.isArray(value) ? value.length > 0 : true)
-      )
-    );
-  };
 
   const showCards = async ({
     pokemonName,
@@ -72,6 +58,13 @@ const CardsContainer = ({
       page: sanitizedPage,
       artist: searchParams.get('artist'),
       setId: searchParams.get('setId'),
+      setIdArray: searchParams.get('setIdArray'),
+      series: searchParams.get('series'),
+      weaknesses: searchParams.get('weaknesses'),
+      resistances: searchParams.get('resistances'),
+      hpMin: searchParams.get('hpMin'),
+      hpMax: searchParams.get('hpMax'),
+      rarities: searchParams.get('rarities'),
     });
     const updatedParams = new URLSearchParams(queryParams).toString();
     router.push(`/search/cards?${updatedParams}`);
@@ -86,6 +79,17 @@ const CardsContainer = ({
       page: sanitizedPage,
       artist: searchParams.get('artist') || undefined,
       setId: searchParams.get('setId') || undefined,
+      setIdArray: searchParams.get('setIdArray')?.split(',') || undefined,
+      series: searchParams.get('series')?.split(',') || undefined,
+      weaknesses: searchParams.get('weaknesses')?.split(',') || undefined,
+      resistances: searchParams.get('resistances')?.split(',') || undefined,
+      hpMin: searchParams.get('hpMin')
+        ? parseInt(searchParams.get('hpMin')!, 10)
+        : undefined,
+      hpMax: searchParams.get('hpMax')
+        ? parseInt(searchParams.get('hpMax')!, 10)
+        : undefined,
+      rarities: searchParams.get('rarities')?.split(',') || undefined,
     });
 
     setSortByChoice(sanitizedSortBy);

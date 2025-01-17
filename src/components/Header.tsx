@@ -86,6 +86,18 @@ const Header = () => {
                 Sets
               </Link>
             </li>
+            <li>
+              <Link
+                href='/search/advanced-search'
+                className={
+                  isCurrentPage('/search/advanced-search')
+                    ? activeClass
+                    : inactiveClass
+                }
+              >
+                Advanced Search
+              </Link>
+            </li>
             <SignedIn>
               <li>
                 <Link
