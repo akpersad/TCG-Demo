@@ -21,7 +21,6 @@ const Page = async () => {
 
   return (
     <AdvancedSearchContainer
-      userID={user?.id}
       collections={collections}
       setNames={setNames}
       seriesNames={seriesNames}

@@ -10,8 +10,15 @@ export type GetCardsProps = {
   page?: number;
   artist?: string;
   setId?: string;
+  setIdArray?: string[];
+  series?: string[];
   supertype?: Supertype[];
   ids?: string[];
+  weaknesses?: string[];
+  resistances?: string[];
+  hpMin?: number;
+  hpMax?: number;
+  rarities?: string[];
 };
 
 export type ParamsProps = {

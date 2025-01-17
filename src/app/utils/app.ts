@@ -46,10 +46,45 @@ export const filterParams = (params: {
       case 'setId':
         filtered.setId = params.setId! as string;
         break;
+      case 'setIdArray':
+        filtered.setIdArray = (params.setIdArray! as string).split(',');
+        break;
+      case 'series':
+        filtered.series = (params.series! as string).split(',');
+        break;
+      case 'weaknesses':
+        filtered.weaknesses = (params.weaknesses! as string).split(',');
+        break;
+      case 'resistances':
+        filtered.resistances = (params.resistances! as string).split(',');
+        break;
+      case 'rarities':
+        filtered.rarities = (params.rarities! as string).split(',');
+        break;
+      case 'hpMin':
+        filtered.hpMin = parseInt(params.hpMin! as string, 10);
+        break;
+      case 'hpMax':
+        filtered.hpMax = parseInt(params.hpMax! as string, 10);
+        break;
       default:
         break;
     }
   });
 
   return filtered;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const filterValidParams = (params: Record<string, any>) => {
+  return Object.fromEntries(
+    Object.entries(params).filter(
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      ([_, value]) =>
+        value !== undefined &&
+        value !== null &&
+        value !== '' &&
+        (Array.isArray(value) ? value.length > 0 : true)
+    )
+  );
 };
