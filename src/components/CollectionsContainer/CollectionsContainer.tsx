@@ -4,6 +4,7 @@ import { Collection } from '@/types/types';
 import Link from 'next/link';
 import { createNewCollectionRequest } from '@/app/client';
 import LoadingOverlay from '@/components/LoadingOverlay/LoadingOverlay';
+import styles from './CollectionsContainer.module.scss';
 
 type Props = {
   userCollections: Collection[];
@@ -96,7 +97,7 @@ const CollectionsContainer = ({ userCollections, userID }: Props) => {
             {userCollectionsStateObject.map((collection) => (
               <Link
                 href={`/collections/${collection._id}`}
-                className='border rounded-lg p-4 shadow-md bg-white dark:bg-gray-800'
+                className={`border rounded-lg p-4 shadow-md bg-white dark:bg-gray-800 ${styles.collectionBox}`}
                 key={collection._id}
               >
                 <div>
@@ -125,7 +126,7 @@ const CollectionsContainer = ({ userCollections, userID }: Props) => {
 
       {isModalOpen && (
         <div
-          className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 modal-overlay'
+          className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-85 modal-overlay'
           onClick={handleOutsideClick}
         >
           <div className='border-gray-200 bg-gray-50 dark:bg-gray-800 p-8 rounded shadow-lg max-w-md w-full relative'>
