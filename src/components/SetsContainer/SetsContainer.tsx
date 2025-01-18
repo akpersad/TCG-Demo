@@ -1,5 +1,6 @@
 import { GroupedSet } from '@/types/types';
 import styles from './SetsContainer.module.scss';
+import Image from 'next/image';
 import Link from 'next/link';
 
 type Props = {
@@ -22,9 +23,11 @@ const SetsContainer = ({ sets }: Props) => {
                   <div
                     className={`rounded-lg bg-white dark:bg-gray-800 p-3 text-center h-full ${styles.cardBox}`}
                   >
-                    <img
+                    <Image
                       src={set.images.logo}
                       alt={set.name}
+                      width={500}
+                      height={500}
                       className='w-full h-48 object-contain'
                     />
                     <div className='p-4'>
