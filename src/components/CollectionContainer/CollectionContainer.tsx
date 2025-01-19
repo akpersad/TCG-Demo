@@ -11,7 +11,7 @@ import DisplayCards from '@/components/DisplayCards/DisplayCards';
 import Pagination from '@/components/Pagination/Pagination';
 import { updateCollectionRequest } from '@/app/client';
 import LoadingOverlay from '@/components/LoadingOverlay/LoadingOverlay';
-import NoResults from '../NoResults/NoResults';
+import NoResults from '@/components/NoResults/NoResults';
 
 interface Props extends CardsResponseProps {
   collectionIds: string[];

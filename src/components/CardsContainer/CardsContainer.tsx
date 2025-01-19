@@ -2,6 +2,7 @@
 import Sidebar from '@/components/Sidebar/Sidebar';
 import DisplayCards from '@/components/DisplayCards/DisplayCards';
 import Pagination from '@/components/Pagination/Pagination';
+import NoResults from '@/components/NoResults/NoResults';
 import { useState } from 'react';
 import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
 import { getCardsByName } from '@/app/utils/tcgClient';
@@ -10,7 +11,6 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { filterParams, filterValidParams } from '@/app/utils/app';
 import { useUser } from '@clerk/nextjs';
 import { Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
-import NoResults from '../NoResults/NoResults';
 
 interface Props extends CardsResponseProps {
   likedCollection?: Collection | null;
