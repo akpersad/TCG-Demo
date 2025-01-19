@@ -10,6 +10,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { filterParams, filterValidParams } from '@/app/utils/app';
 import { useUser } from '@clerk/nextjs';
 import { Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
+import NoResults from '../NoResults/NoResults';
 
 interface Props extends CardsResponseProps {
   likedCollection?: Collection | null;
@@ -132,71 +133,77 @@ const CardsContainer = ({
         }
       />
       <div className='p-4 sm:ml-64'>
-        <div className='flex justify-end'>
-          {/* Sort By */}
+        {displayCards.length > 0 ? (
+          <>
+            <div className='flex justify-end'>
+              {/* Sort By */}
 
-          <div className='mb-4 text-right mr-4'>
-            <label htmlFor='sortByFilter' className='mr-2'>
-              Sort By:
-            </label>
-            <select
-              id='sortByFilter'
-              value={sortByChoice}
-              onChange={(e) => handleSortByChange(e.target.value)}
-              className='border rounded p-2 bg-black'
-            >
-              <option value={'-set.releaseDate'}>
-                Set Release Date (Descending)
-              </option>
-              <option value={'set.releaseDate'}>
-                Set Release Date (Ascending)
-              </option>
-              <option value={'-name'}>Name (Descending)</option>
-              <option value={'name'}>Name (Ascending)</option>
-              <option value={'-nationalPokedexNumbers'}>
-                National Pokedex Number (Descending)
-              </option>
-              <option value={'nationalPokedexNumbers'}>
-                National Pokedex Number (Ascending)
-              </option>
-              <option value={'-hp'}>HP (Descending)</option>
-              <option value={'hp'}>HP (Ascending)</option>
-            </select>
-          </div>
+              <div className='mb-4 text-right mr-4'>
+                <label htmlFor='sortByFilter' className='mr-2'>
+                  Sort By:
+                </label>
+                <select
+                  id='sortByFilter'
+                  value={sortByChoice}
+                  onChange={(e) => handleSortByChange(e.target.value)}
+                  className='border rounded p-2 bg-black'
+                >
+                  <option value={'-set.releaseDate'}>
+                    Set Release Date (Descending)
+                  </option>
+                  <option value={'set.releaseDate'}>
+                    Set Release Date (Ascending)
+                  </option>
+                  <option value={'-name'}>Name (Descending)</option>
+                  <option value={'name'}>Name (Ascending)</option>
+                  <option value={'-nationalPokedexNumbers'}>
+                    National Pokedex Number (Descending)
+                  </option>
+                  <option value={'nationalPokedexNumbers'}>
+                    National Pokedex Number (Ascending)
+                  </option>
+                  <option value={'-hp'}>HP (Descending)</option>
+                  <option value={'hp'}>HP (Ascending)</option>
+                </select>
+              </div>
 
-          {/* Put page size dropdown code heree */}
+              {/* Put page size dropdown code heree */}
 
-          <div className='mb-4 text-right'>
-            <label htmlFor='pageSize' className='mr-2'>
-              Result Count:
-            </label>
-            <select
-              id='pageSize'
-              value={selectedPageSize}
-              onChange={(e) => handlePageSizeChange(Number(e.target.value))}
-              className='border rounded p-2 bg-black'
-            >
-              <option value={12}>12</option>
-              <option value={24}>24</option>
-              <option value={36}>36</option>
-            </select>
-          </div>
-        </div>
+              <div className='mb-4 text-right'>
+                <label htmlFor='pageSize' className='mr-2'>
+                  Result Count:
+                </label>
+                <select
+                  id='pageSize'
+                  value={selectedPageSize}
+                  onChange={(e) => handlePageSizeChange(Number(e.target.value))}
+                  className='border rounded p-2 bg-black'
+                >
+                  <option value={12}>12</option>
+                  <option value={24}>24</option>
+                  <option value={36}>36</option>
+                </select>
+              </div>
+            </div>
 
-        <DisplayCards
-          displayCards={displayCards}
-          isSignedIn={isSignedIn}
-          dataLoading={dataLoading}
-          likedCollection={likedCollection}
-          likedCards={likedCards}
-        />
-        {totalCardCount > selectedPageSize && (
-          <Pagination
-            totalCount={totalCardCount}
-            pageSize={selectedPageSize}
-            currentPage={currentPage}
-            onPageChange={handlePageChange}
-          />
+            <DisplayCards
+              displayCards={displayCards}
+              isSignedIn={isSignedIn}
+              dataLoading={dataLoading}
+              likedCollection={likedCollection}
+              likedCards={likedCards}
+            />
+            {totalCardCount > selectedPageSize && (
+              <Pagination
+                totalCount={totalCardCount}
+                pageSize={selectedPageSize}
+                currentPage={currentPage}
+                onPageChange={handlePageChange}
+              />
+            )}
+          </>
+        ) : (
+          <NoResults />
         )}
       </div>
     </div>
