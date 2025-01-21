@@ -5,12 +5,14 @@ import { currentUser } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
 import { getCardsByName } from '@/app/utils/tcgClient';
 import CollectionContainer from '@/components/CollectionContainer/CollectionContainer';
+import { filterParams } from '@/app/utils/app';
 
 type Props = {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-export default async function Page({ params }: Props) {
+export default async function Page({ params, searchParams }: Props) {
   const { id } = await params;
   const user = await currentUser();
   const { status, collection, collectionItems } = id
@@ -22,9 +24,12 @@ export default async function Page({ params }: Props) {
   }
 
   const collectionIds = collectionItems.map((item) => item.cardID);
+  const initialParams = await searchParams;
+  const filteredParams = filterParams(initialParams);
 
   const cardsData = await getCardsByName({
     ids: collectionIds,
+    ...filteredParams,
   });
 
   return (

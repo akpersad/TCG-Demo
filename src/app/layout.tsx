@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { ClerkProvider } from '@clerk/nextjs';
 import localFont from 'next/font/local';
 import './globals.css';
+import styles from './globals.module.scss';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer/Footer';
 
@@ -35,7 +36,7 @@ export default function RootLayout({
           <div>
             <Header />
           </div>
-          {children}
+          <div className={styles.pageBody}>{children}</div>
           <Footer />
         </body>
       </html>
