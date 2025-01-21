@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation';
 import { getCardsByName } from '@/app/utils/tcgClient';
 import CollectionContainer from '@/components/CollectionContainer/CollectionContainer';
 import { filterParams } from '@/app/utils/app';
+import { Card } from 'pokemon-tcg-sdk-typescript/dist/sdk';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -27,10 +28,13 @@ export default async function Page({ params, searchParams }: Props) {
   const initialParams = await searchParams;
   const filteredParams = filterParams(initialParams);
 
-  const cardsData = await getCardsByName({
-    ids: collectionIds,
-    ...filteredParams,
-  });
+  const cardsData =
+    collectionIds.length > 0
+      ? await getCardsByName({
+          ids: collectionIds,
+          ...filteredParams,
+        })
+      : { cards: [] as Card[], count: 0, totalCount: 0, page: 1, pageSize: 12 };
 
   return (
     <>
