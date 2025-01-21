@@ -77,10 +77,12 @@ const Sidebar = ({
   return (
     <aside
       id='default-sidebar'
-      className={`fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0 mt-64px ${styles.sidebar}`}
+      className={`fixed sm:relative top-0 left-0 z-40 w-64 h-screen sm:h-auto transition-transform -translate-x-full sm:translate-x-0 mt-64px ${styles.sidebar}`}
       aria-label='Sidebar'
     >
-      <div className='h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800'>
+      <div
+        className={`h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800 ${styles.sidebarInner}`}
+      >
         <ul className='space-y-2 font-medium'>
           <li>
             <div className='relative z-0 w-full mb-5 group'>

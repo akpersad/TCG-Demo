@@ -165,7 +165,7 @@ const CollectionContainer = ({
   };
 
   return (
-    <div className='container mx-auto my-8'>
+    <div className='container flex'>
       <Sidebar
         showCards={showCards}
         searchLoading={false}
@@ -176,7 +176,7 @@ const CollectionContainer = ({
           searchParams.get('supertype')?.split(',') as Supertype[]
         }
       />
-      <div className='p-4 sm:ml-64'>
+      <div className=''>
         {!isEditState && (
           <div className='flex mb-4 justify-between items-center'>
             <div>
