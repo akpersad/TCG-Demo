@@ -121,7 +121,7 @@ const CardsContainer = ({
   };
 
   return (
-    <div className='container mx-auto my-8'>
+    <div className='flex'>
       <Sidebar
         showCards={showCards}
         searchLoading={false}
@@ -132,7 +132,7 @@ const CardsContainer = ({
           searchParams.get('supertype')?.split(',') as Supertype[]
         }
       />
-      <div className='p-4 sm:ml-64'>
+      <div className={`my-4 ${displayCards.length > 0 ? 'mx-12' : 'mx-auto'}`}>
         {displayCards.length > 0 ? (
           <>
             <div className='flex justify-end'>
