@@ -9,6 +9,7 @@ import { useMemo } from 'react';
 import Link from 'next/link';
 import { Collection } from '@/types/types';
 import AddToCollection from '@/components/AddToCollection/AddToCollection';
+import { Price } from 'pokemon-tcg-sdk-typescript/dist/sdk';
 
 type Props = {
   cardData: PokemonTCG.Card;
@@ -73,6 +74,75 @@ const CardContainer = ({ cardData, userID, collections }: Props) => {
     ];
     return stats;
   }, [cardData]);
+
+  const convertPrice = (price?: number | null) =>
+    price ? `$${price.toFixed(2)}` : '';
+
+  const priceFragments = (priceObj: {
+    normal?: Price;
+    holofoil?: Price;
+    reverseHolofoil?: Price;
+  }) => {
+    const typeMapping = {
+      normal: 'Normal',
+      holofoil: 'Holofoil',
+      reverseHolofoil: 'Reverse Holofoil',
+    };
+    const cardVersions = Object.keys(priceObj);
+    return cardVersions.map((version) => {
+      const price = priceObj[version as keyof typeof priceObj];
+      if (price) {
+        return (
+          <div
+            key={`price-${version}`}
+            className={`${styles.priceContainer} mt-6`}
+          >
+            <div className='calcHeader text-left text-base'>
+              {typeMapping[version as keyof typeof typeMapping]}
+            </div>
+            <div className='flex justify-between flex-wrap mt-4'>
+              {/* Market */}
+              <div className={`flex flex-col`}>
+                <div className='calcHeader text-center text-sm'>Market</div>
+                <div className='calcBody flex mt-2 text-lg text-center'>
+                  <p className='flex justify-center items-center'>
+                    {convertPrice(price.market)}
+                  </p>
+                </div>
+              </div>
+              {/* Low */}
+              <div className={`flex flex-col`}>
+                <div className='calcHeader text-center text-sm'>Low</div>
+                <div className='calcBody flex mt-2 text-lg text-center'>
+                  <p className='flex justify-center items-center'>
+                    {convertPrice(price.low)}
+                  </p>
+                </div>
+              </div>
+              {/* Mid */}
+              <div className={`flex flex-col`}>
+                <div className='calcHeader text-center text-sm'>Mid</div>
+                <div className='calcBody flex mt-2 text-lg text-center'>
+                  <p className='flex justify-center items-center'>
+                    {convertPrice(price.mid)}
+                  </p>
+                </div>
+              </div>
+              {/* High */}
+              <div className={`flex flex-col`}>
+                <div className='calcHeader text-center text-sm'>High</div>
+                <div className='calcBody flex mt-2 text-lg text-center'>
+                  <p className='flex justify-center items-center'>
+                    {convertPrice(price.high)}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      }
+    });
+  };
 
   return (
     <div className='card-container container mx-auto my-auto grid grid-cols-2 gap-4 mt-10'>
@@ -214,6 +284,7 @@ const CardContainer = ({ cardData, userID, collections }: Props) => {
           </div>
         )}
 
+        {/* Weakness, Resistance, Retreat */}
         {cardData.supertype === 'Pokémon' && (
           <div className='my-6 pt-6 bottomInfoContainer'>
             <div className='flex justify-between'>
@@ -231,7 +302,7 @@ const CardContainer = ({ cardData, userID, collections }: Props) => {
                         return (
                           <p
                             key={`${value.type.name}-stat-${cardData.id}-${index}`}
-                            className='flex justify-center items-center'
+                            className='flex justify-center items-center mr-1'
                           >
                             <Image
                               src={value.type.image}
@@ -334,7 +405,12 @@ const CardContainer = ({ cardData, userID, collections }: Props) => {
               <div className='calcHeader text-center text-sm'>Rarity</div>
               <div className='calcBody flex mt-2 text-lg'>
                 <p className='flex justify-center items-center'>
-                  {cardData.rarity}
+                  <Link
+                    href={`/search/cards?rarities=${cardData.rarity}`}
+                    className='text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent'
+                  >
+                    {cardData.rarity}
+                  </Link>
                 </p>
               </div>
             </div>
@@ -355,6 +431,26 @@ const CardContainer = ({ cardData, userID, collections }: Props) => {
             </div>
           </div>
         </div>
+
+        {/* Card Pricing */}
+        {cardData.tcgplayer && (
+          <div className='my-6 pt-6'>
+            <div className='flex items-end'>
+              <h4 className='text-xl mr-4'>Price Information</h4>
+              <span className='text-sm'>
+                Last updated: {cardData.tcgplayer.updatedAt}
+              </span>
+            </div>
+            <div>
+              <Link href={cardData.tcgplayer.url} target='_blank'>
+                Buy on TCG Player
+              </Link>
+            </div>
+            {/* <div className='flex justify-between flex-wrap mt-4'> */}
+            {priceFragments(cardData.tcgplayer.prices)}
+            {/* </div> */}
+          </div>
+        )}
 
         {/* Add To Collection */}
         {userID && collections && collections?.length > 0 && (
