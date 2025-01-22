@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { GoogleAnalytics } from '@next/third-parties/google';
 import { ClerkProvider } from '@clerk/nextjs';
 import localFont from 'next/font/local';
 import './globals.css';
@@ -39,6 +40,7 @@ export default function RootLayout({
           <div className={styles.pageBody}>{children}</div>
           <Footer />
         </body>
+        <GoogleAnalytics gaId='G-EB291KFBXQ' />
       </html>
     </ClerkProvider>
   );
