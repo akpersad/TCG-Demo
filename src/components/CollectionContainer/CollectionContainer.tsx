@@ -84,6 +84,13 @@ const CollectionContainer = ({
       page: sanitizedPage,
       artist: searchParams.get('artist'),
       setId: searchParams.get('setId'),
+      setIdArray: searchParams.get('setIdArray'),
+      series: searchParams.get('series'),
+      weaknesses: searchParams.get('weaknesses'),
+      resistances: searchParams.get('resistances'),
+      hpMin: searchParams.get('hpMin'),
+      hpMax: searchParams.get('hpMax'),
+      rarities: searchParams.get('rarities'),
     });
     const updatedParams = new URLSearchParams(queryParams).toString();
 
@@ -97,9 +104,20 @@ const CollectionContainer = ({
       orderBy: sanitizedSortBy,
       pageSize: sanitizedPageSize,
       page: sanitizedPage,
+      ids: collectionIds,
       artist: searchParams.get('artist') || undefined,
       setId: searchParams.get('setId') || undefined,
-      ids: collectionIds,
+      setIdArray: searchParams.get('setIdArray')?.split(',') || undefined,
+      series: searchParams.get('series')?.split(',') || undefined,
+      weaknesses: searchParams.get('weaknesses')?.split(',') || undefined,
+      resistances: searchParams.get('resistances')?.split(',') || undefined,
+      hpMin: searchParams.get('hpMin')
+        ? parseInt(searchParams.get('hpMin')!, 10)
+        : undefined,
+      hpMax: searchParams.get('hpMax')
+        ? parseInt(searchParams.get('hpMax')!, 10)
+        : undefined,
+      rarities: searchParams.get('rarities')?.split(',') || undefined,
     });
 
     setSortByChoice(sanitizedSortBy);
@@ -165,7 +183,7 @@ const CollectionContainer = ({
   };
 
   return (
-    <div className='container flex'>
+    <div className='flex'>
       <Sidebar
         showCards={showCards}
         searchLoading={false}
@@ -176,7 +194,7 @@ const CollectionContainer = ({
           searchParams.get('supertype')?.split(',') as Supertype[]
         }
       />
-      <div className=''>
+      <div className={`py-4 mx-auto`}>
         {!isEditState && (
           <div className='flex mb-4 justify-between items-center'>
             <div>

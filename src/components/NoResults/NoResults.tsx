@@ -7,7 +7,13 @@ const NoResults = () => {
     <div className='flex flex-col items-center justify-center h-full p-4'>
       <div className='text-center'>
         <p className='text-2xl font-bold mb-4'>No Results Found</p>
-        <Image src={Psyduck} alt='No Results' height={500} width={500} />
+        <Image
+          src={Psyduck}
+          alt='No Results'
+          height={500}
+          width={500}
+          unoptimized
+        />
         <p className='mt-4 text-lg'>
           <Link
             href={'/search/advanced-search'}

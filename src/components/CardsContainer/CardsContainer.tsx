@@ -132,7 +132,7 @@ const CardsContainer = ({
           searchParams.get('supertype')?.split(',') as Supertype[]
         }
       />
-      <div className={`my-4 ${displayCards.length > 0 ? 'mx-12' : 'mx-auto'}`}>
+      <div className={`py-4 mx-auto`}>
         {displayCards.length > 0 ? (
           <>
             <div className='flex justify-end'>
