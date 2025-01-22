@@ -10,11 +10,12 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^6.9.1",
+    "@next/third-parties": "^15.1.6",
     "axios": "^1.7.9",
     "axios-cache-interceptor": "^1.6.2",
     "mongodb": "^6.12.0",
     "net": "^1.0.2",
-    "next": "15.1.5",
+    "next": "^15.1.6",
     "pokemon-tcg-sdk-typescript": "^1.3.4",
     "pokemontcgsdk": "^2.0.0",
     "pokenode-ts": "^1.20.0",
