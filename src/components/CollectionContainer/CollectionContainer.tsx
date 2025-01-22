@@ -194,7 +194,7 @@ const CollectionContainer = ({
           searchParams.get('supertype')?.split(',') as Supertype[]
         }
       />
-      <div className={`py-4 mx-auto`}>
+      <div className={`py-4 px-5 mx-auto`}>
         {!isEditState && (
           <div className='flex mb-4 justify-between items-center'>
             <div>
