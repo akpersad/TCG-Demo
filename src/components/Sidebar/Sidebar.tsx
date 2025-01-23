@@ -81,7 +81,7 @@ const Sidebar = ({
       aria-label='Sidebar'
     >
       <div
-        className={`h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800 ${styles.sidebarInner}`}
+        className={`h-full px-3 py-4 overflow-y-auto bg-transparent ${styles.sidebarInner}`}
       >
         <ul className='space-y-2 font-medium'>
           <li>
@@ -104,7 +104,7 @@ const Sidebar = ({
               id='supertype_multiple'
               size={3}
               value={supertype}
-              className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+              className='bg-transparent border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
               onChange={(e) => {
                 const options = e.target.selectedOptions;
                 setSupertype(
