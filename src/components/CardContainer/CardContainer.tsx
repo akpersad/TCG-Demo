@@ -145,7 +145,7 @@ const CardContainer = ({ cardData, userID, collections }: Props) => {
   };
 
   return (
-    <div className='card-container container mx-auto my-auto grid grid-cols-2 gap-4 mt-10'>
+    <div className='card-container container mx-auto my-auto grid sm:grid-cols-2 gap-4 mt-10 px-2'>
       <div className=''>
         <Image
           src={cardData.images.large}
@@ -326,20 +326,22 @@ const CardContainer = ({ cardData, userID, collections }: Props) => {
           </div>
         )}
 
-        {cardData.supertype === 'Trainer' ||
-          (cardData.supertype === 'Energy' && cardData.rules && (
+        {(cardData.supertype === 'Trainer' ||
+          cardData.supertype === 'Energy') &&
+          cardData.rules && (
             <div className='my-6 pb-6 bottomInfoContainer'>
               <div className='flex justify-between'>
                 <div className='flex flex-col'>
+                  <h4 className='text-xl'>Rules</h4>
                   <div className='calcBody flex mt-2'>
                     <p className='flex justify-center items-center'>
-                      {cardData.rules}
+                      {cardData.rules[0]}
                     </p>
                   </div>
                 </div>
               </div>
             </div>
-          ))}
+          )}
 
         {/* Set Information */}
         <div className='my-6 pb-6 setInfoContainer'>
