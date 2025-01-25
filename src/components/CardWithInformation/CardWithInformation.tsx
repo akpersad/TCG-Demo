@@ -62,7 +62,7 @@ const CardWithInformation = ({
         )}
         <Link
           href={`/search/cards/${card.id}`}
-          className='h-full flex flex-col justify-between'
+          className={`h-full flex flex-col justify-between ${styles.cardContainer}`}
         >
           <h2 className='capitalize text-lg font-semibold'>{card.name}</h2>
           <Image

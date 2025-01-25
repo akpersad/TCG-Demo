@@ -97,7 +97,7 @@ const CollectionsContainer = ({ userCollections, userID }: Props) => {
             {userCollectionsStateObject.map((collection) => (
               <Link
                 href={`/collections/${collection._id}`}
-                className={`border rounded-lg p-4 shadow-md bg-white dark:bg-gray-800 ${styles.collectionBox}`}
+                className={`rounded-lg p-4 shadow-md bg-white dark:bg-gray-800 ${styles.collectionBox}`}
                 key={collection._id}
               >
                 <div>
@@ -126,13 +126,13 @@ const CollectionsContainer = ({ userCollections, userID }: Props) => {
 
       {isModalOpen && (
         <div
-          className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-85 modal-overlay'
+          className='fixed inset-0 flex items-center justify-center bg-black opacity-85 modal-overlay'
           onClick={handleOutsideClick}
         >
           <div className='border-gray-200 bg-gray-50 dark:bg-gray-800 p-8 rounded shadow-lg max-w-md w-full relative'>
             <button
               onClick={closeModal}
-              className='absolute top-2 right-2 text-gray-500 hover:text-gray-700'
+              className={`absolute top-2 right-2 text-gray-500 hover:text-gray-700 ${styles.closeButton}`}
             >
               &times;
             </button>
@@ -184,13 +184,11 @@ const CollectionsContainer = ({ userCollections, userID }: Props) => {
                       e.preventDefault();
                       closeModal();
                     }}
-                    className='bg-blue-500 text-white px-4 py-2 rounded mr-6'
+                    className='text-white px-4 py-2 rounded mr-6 btn-secondary'
                   >
                     Close
                   </button>
-                  <button className='bg-blue-500 text-white px-4 py-2 rounded'>
-                    Add
-                  </button>
+                  <button className='text-white px-4 py-2 rounded'>Add</button>
                 </div>
               </form>
             </div>

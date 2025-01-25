@@ -50,7 +50,7 @@ const Pagination = ({
   return (
     <div className='flex justify-center items-center space-x-2 mt-4'>
       <button
-        className='px-4 py-2 bg-black rounded hover:bg-gray-300 hover:text-black'
+        className='px-4 py-2 bg-black rounded hover:bg-gray-300'
         disabled={currentPage === 1 || totalPages === 1}
         onClick={() => onPageChange(currentPage - 1)}
       >
@@ -62,8 +62,8 @@ const Pagination = ({
             key={index}
             className={`px-4 py-2 rounded ${
               currentPage === page
-                ? 'bg-blue-500 text-white'
-                : 'bg-black rounded hover:bg-gray-300 hover:text-black'
+                ? 'border btn-secondary text-white'
+                : 'bg-black rounded hover:bg-gray-300 '
             }`}
             onClick={() => onPageChange(page)}
           >
@@ -76,7 +76,7 @@ const Pagination = ({
         )
       )}
       <button
-        className='px-4 py-2 bg-black rounded hover:bg-gray-300 hover:text-black'
+        className='px-4 py-2 bg-black rounded hover:bg-gray-300'
         disabled={currentPage === totalPages || totalPages === 1}
         onClick={() => onPageChange(currentPage + 1)}
       >

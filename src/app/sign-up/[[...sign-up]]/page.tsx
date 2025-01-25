@@ -71,7 +71,9 @@ const SignUp = () => {
     <div
       className={`flex items-center justify-center ${styles.signUpContainer}`}
     >
-      <div className='w-full h-full bg-slate-400 bg-opacity-50 m-8 flex justify-center items-center'>
+      <div
+        className={`sm:w-1/2 w-full h-3/4 bg-slate-400 bg-opacity-50 m-8 flex justify-center items-center ${styles.innerContainer}`}
+      >
         <form
           className='bg-gray-700 p-8 rounded-lg shadow-md w-full max-w-md'
           onSubmit={handleSignUp}

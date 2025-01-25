@@ -139,7 +139,7 @@ const AdvancedSearchContainer = ({
                 id='sortByFilter'
                 value={selectedCollection}
                 onChange={(e) => setSelectedCollection(e.target.value)}
-                className='border rounded p-2 bg-black'
+                className='border rounded p-2 bg-transparent'
               >
                 <option value=''>{''}</option>
                 {collections.map((collection) => (
@@ -175,7 +175,7 @@ const AdvancedSearchContainer = ({
               id='supertype_multiple'
               size={3}
               value={supertype}
-              className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+              className='bg-transparent border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
               onChange={(e) => {
                 const options = e.target.selectedOptions;
                 setSupertype(
@@ -341,7 +341,7 @@ const AdvancedSearchContainer = ({
             </div>
             <div className='item relative z-0 w-full my-5 pt-5 group'>
               <button
-                className='bg-blue-500 text-white px-4 py-2 rounded'
+                className='bg-blue-500 text-white px-4 py-2 rounded cursor-pointer'
                 type='submit'
               >
                 Search

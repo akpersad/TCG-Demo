@@ -265,7 +265,7 @@ const CollectionContainer = ({
               </div>
               <div className='flex sm:mt-0 mt-5 md:text-right justify-between items-start sm:justify-end'>
                 <button
-                  className='bg-gray-500 text-white px-4 py-2 rounded'
+                  className='bg-gray-500 text-white px-4 py-2 rounded btn-secondary'
                   type='reset'
                 >
                   Cancel

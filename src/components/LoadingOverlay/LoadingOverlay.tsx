@@ -2,7 +2,7 @@ const LoadingOverlay = () => {
   return (
     <div
       id='loading-overlay'
-      className='absolute inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-60'
+      className='absolute inset-0 z-50 flex items-center justify-center bg-black opacity-80'
     >
       <svg
         className='animate-spin h-8 w-8 text-white mr-3'

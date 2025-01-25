@@ -20,3 +20,10 @@
     box-shadow: 1px 7px 20px 3px rgba(255, 255, 255, 0.5);
   }
 }
+
+.cardContainer {
+  &:hover {
+    color: #fff;
+    text-decoration: none;
+  }
+}
