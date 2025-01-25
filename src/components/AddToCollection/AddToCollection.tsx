@@ -57,7 +57,7 @@ const AddToCollection = ({ collections, cardData }: Props) => {
                 id='sortByFilter'
                 value={selectedCollection}
                 onChange={(e) => setSelectedCollection(e.target.value)}
-                className='border rounded p-2 bg-black'
+                className='border rounded p-2 bg-transparent'
               >
                 <option disabled value=''>
                   Select Collection

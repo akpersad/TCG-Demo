@@ -4,7 +4,7 @@ import { ClerkProvider } from '@clerk/nextjs';
 import localFont from 'next/font/local';
 import './globals.css';
 import styles from './globals.module.scss';
-import Header from '@/components/Header';
+import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
 
 const geistSans = localFont({
@@ -34,6 +34,8 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
+          <div className={styles.pageGradientBottom} />
+          {/* <div className={styles.pageGradientTop} /> */}
           <Header />
           <div className={styles.pageBody}>{children}</div>
           <Footer />

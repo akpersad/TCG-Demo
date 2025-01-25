@@ -155,7 +155,7 @@ const CardContainer = ({ cardData, userID, collections }: Props) => {
         />
       </div>
       <div className='divide-y-2 divide-gray-300'>
-        <div>
+        <div className='pb-6'>
           <div className='flex justify-between'>
             <div className=''>
               {/* Name */}
@@ -232,7 +232,7 @@ const CardContainer = ({ cardData, userID, collections }: Props) => {
         </div>
         {/* Ability */}
         {cardData.supertype === 'Pokémon' && cardData.abilities && (
-          <div className='my-6 pt-6'>
+          <div className='my-6 pb-6'>
             {cardData.abilities.map((ability) => (
               <div key={`${ability.name}-ability-${cardData.id}`}>
                 <div className='flex'>
@@ -253,7 +253,7 @@ const CardContainer = ({ cardData, userID, collections }: Props) => {
         )}
         {/* Attacks */}
         {cardData.supertype === 'Pokémon' && cardData.attacks && (
-          <div className='my-6 pt-6'>
+          <div className='my-6 pb-6'>
             {cardData.attacks.map((attack) => (
               <div
                 key={`${attack.name}-attack-${cardData.id}`}
@@ -286,7 +286,7 @@ const CardContainer = ({ cardData, userID, collections }: Props) => {
 
         {/* Weakness, Resistance, Retreat */}
         {cardData.supertype === 'Pokémon' && (
-          <div className='my-6 pt-6 bottomInfoContainer'>
+          <div className='my-6 pb-6 bottomInfoContainer'>
             <div className='flex justify-between'>
               {statsObject.map((stat) => {
                 return (
@@ -328,7 +328,7 @@ const CardContainer = ({ cardData, userID, collections }: Props) => {
 
         {cardData.supertype === 'Trainer' ||
           (cardData.supertype === 'Energy' && cardData.rules && (
-            <div className='my-6 pt-6 bottomInfoContainer'>
+            <div className='my-6 pb-6 bottomInfoContainer'>
               <div className='flex justify-between'>
                 <div className='flex flex-col'>
                   <div className='calcBody flex mt-2'>
@@ -342,7 +342,7 @@ const CardContainer = ({ cardData, userID, collections }: Props) => {
           ))}
 
         {/* Set Information */}
-        <div className='my-6 pt-6 setInfoContainer'>
+        <div className='my-6 pb-6 setInfoContainer'>
           <h4 className='text-xl'>Set Information</h4>
           <div className='flex justify-between flex-wrap mt-4'>
             {/* Series Name */}
@@ -434,7 +434,7 @@ const CardContainer = ({ cardData, userID, collections }: Props) => {
 
         {/* Card Pricing */}
         {cardData.tcgplayer && (
-          <div className='my-6 pt-6'>
+          <div className='my-6 pb-6'>
             <div className='flex items-end'>
               <h4 className='text-xl mr-4'>Price Information</h4>
               <span className='text-sm'>

@@ -25,7 +25,7 @@ const CardsPage = async ({ searchParams }: Props) => {
   const filteredParams = filterParams(initialParams);
 
   const initialCards = isEmptyObject(filteredParams)
-    ? await getCardsByName({ pokemonName: 'charizard' })
+    ? await getCardsByName({})
     : await getCardsByName(filteredParams);
   return (
     <CardsContainer

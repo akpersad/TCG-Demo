@@ -1,0 +1,49 @@
+.active {
+  color: var(--activeRed);
+}
+
+a {
+  &:hover {
+    .textCallout {
+      color: var(--activeRed);
+    }
+    img.pokeball {
+      transition: 0.75s;
+      transform: rotate(360deg);
+      content: url('/assets/Masterball.png');
+    }
+  }
+  &:focus,
+  &:focus-visible {
+    .textCallout {
+      color: var(--activeRed);
+    }
+    img.pokeball {
+      transition: 0.75s;
+      transform: rotate(360deg);
+      content: url('/assets/Masterball.png');
+    }
+  }
+  &:not(:hover) img.pokeball {
+    transition: 0.75s;
+    transform: rotate(0deg);
+    content: url('/assets/luxuryball.png');
+  }
+  &:not(:focus):not(:focus-visible) img.pokeball {
+    transition: 0.75s;
+    transform: rotate(0deg);
+    content: url('/assets/luxuryball.png');
+  }
+}
+
+.navContainer {
+  li {
+    & > button {
+      &:hover {
+        color: var(--activeRed);
+        text-decoration: underline;
+        cursor: pointer;
+      }
+    }
+  }
+}
