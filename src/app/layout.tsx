@@ -35,7 +35,6 @@ export default function RootLayout({
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
           <div className={styles.pageGradientBottom} />
-          {/* <div className={styles.pageGradientTop} /> */}
           <Header />
           <div className={styles.pageBody}>{children}</div>
           <Footer />
