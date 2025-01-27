@@ -1,0 +1,98 @@
+.container {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 116px - 64px - 75px);
+}
+
+.section {
+  &:not(:first-of-type) {
+    margin-top: 100px;
+  }
+}
+
+.cardText {
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.cardContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1000px;
+}
+
+.cardElement {
+  height: 100%;
+  transition: 0.75s;
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+.leftCard {
+  transform: rotateY(20deg) translateZ(-100px) rotateX(5deg);
+  margin-right: -50px;
+}
+
+.middleCard {
+  transform: rotateX(10deg) translateZ(0);
+  z-index: 1;
+}
+
+.rightCard {
+  transform: rotateY(-20deg) translateZ(-100px) rotateX(5deg);
+  margin-left: -50px;
+}
+
+@media (width >= 40rem) {
+  .leftCard {
+    width: 125px;
+  }
+  .middleCard {
+    width: 175px;
+  }
+  .rightCard {
+    width: 100px;
+  }
+}
+@media (width >= 48rem) {
+  .leftCard {
+    width: 150px;
+  }
+  .middleCard {
+    width: 200px;
+  }
+  .rightCard {
+    width: 100px;
+  }
+}
+@media (width >= 64rem) {
+  .leftCard {
+    width: 200px;
+  }
+  .middleCard {
+    width: 250px;
+  }
+  .rightCard {
+    width: 150px;
+  }
+}
+// @media (width >= 80rem) {
+//   .leftCard {
+//   }
+//   .middleCard {
+//   }
+//   .rightCard {
+//   }
+// }
+// @media (width >= 96rem) {
+//   .leftCard {
+//   }
+//   .middleCard {
+//   }
+//   .rightCard {
+//   }
+// }
