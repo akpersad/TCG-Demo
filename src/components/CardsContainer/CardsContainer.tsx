@@ -112,12 +112,20 @@ const CardsContainer = ({
 
   const handlePageSizeChange = async (pageSize: number) => {
     setSelectedPageSize(pageSize);
-    await showCards({ ...getCurrentParams(), ...{ pageSize } });
+    await showCards({
+      ...getCurrentParams(),
+      resetPageCount: true,
+      ...{ pageSize },
+    });
   };
 
   const handleSortByChange = async (orderBy: string) => {
     setSortByChoice(orderBy);
-    await showCards({ ...getCurrentParams(), ...{ orderBy } });
+    await showCards({
+      ...getCurrentParams(),
+      resetPageCount: true,
+      ...{ orderBy },
+    });
   };
 
   return (
@@ -135,10 +143,10 @@ const CardsContainer = ({
       <div className={`py-4 px-5 mx-auto`}>
         {displayCards.length > 0 ? (
           <>
-            <div className='flex justify-end'>
+            <div className='flex justify-end flex-wrap'>
               {/* Sort By */}
 
-              <div className='mb-4 text-right mr-4'>
+              <div className='mb-4 text-right mr-0 md:mr-3 lg:mr-4'>
                 <label htmlFor='sortByFilter' className='mr-2'>
                   Sort By:
                 </label>
@@ -167,8 +175,7 @@ const CardsContainer = ({
                 </select>
               </div>
 
-              {/* Put page size dropdown code heree */}
-
+              {/* Result Count */}
               <div className='mb-4 text-right'>
                 <label htmlFor='pageSize' className='mr-2'>
                   Result Count:
