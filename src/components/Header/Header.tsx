@@ -11,13 +11,15 @@ import styles from './Header.module.scss';
 const Header = () => {
   const pathname = usePathname();
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [count, setCount] = useState(0);
   const menuRef = useRef<HTMLDivElement>(null);
+  const menuButton = useRef<HTMLButtonElement>(null);
 
   const isCurrentPage = useMemo(() => {
     return (currentPathname: string) => pathname === currentPathname;
   }, [pathname]);
 
-  const activeClass = `block py-2 px-3 text-activeRed bg-blue-700 rounded md:bg-transparent md:activeRed md:p-0 dark:text-activeRed md:dark:activeRed ${styles.active}`;
+  const activeClass = `block py-2 px-3 text-activeRed rounded md:bg-transparent md:activeRed md:p-0 dark:text-activeRed md:dark:activeRed ${styles.active}`;
   const inactiveClass =
     'block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent';
 
@@ -26,7 +28,10 @@ const Header = () => {
   };
 
   const handleClickOutside = (event: MouseEvent) => {
-    if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+    if (
+      (menuRef.current && !menuRef.current.contains(event.target as Node)) ||
+      (menuButton.current && menuButton.current.contains(event.target as Node))
+    ) {
       setShowMobileMenu(false);
     }
   };
@@ -62,6 +67,7 @@ const Header = () => {
         </Link>
         <button
           data-collapse-toggle='navbar-default'
+          ref={menuButton}
           type='button'
           onClick={toggleMobileMenu}
           className={`inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 ${styles.headerBtn}`}
@@ -153,7 +159,7 @@ const Header = () => {
                 </Link>
               </li>
 
-              <li>
+              <li className={styles.userButton}>
                 <UserButton />
               </li>
             </SignedIn>

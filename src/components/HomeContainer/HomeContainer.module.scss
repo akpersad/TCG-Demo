@@ -3,7 +3,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: calc(100vh - 116px - 64px - 75px);
 }
 
 .section {
@@ -67,6 +66,10 @@
   }
   .rightCard {
     width: 100px;
+  }
+
+  .container {
+    height: calc(100vh - 116px - 64px - 75px);
   }
 }
 @media (width >= 64rem) {
