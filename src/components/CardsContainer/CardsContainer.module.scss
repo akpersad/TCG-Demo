@@ -1,6 +1,35 @@
-.sideMenuBtn {
-  top: 60px;
-  left: -15px;
+@mixin glassEffect {
+  background: rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(45px);
+  -webkit-backdrop-filter: blur(45px);
+}
+
+.sideMenuBtnContainer {
+  top: 200px;
+  left: 0;
   height: 50px;
   width: 50px;
+  z-index: 1;
+  writing-mode: vertical-lr;
+  text-orientation: upright;
+  //   transition: 0.75s;
+  .sideMenuBtn {
+    @include glassEffect;
+    min-height: 100px;
+    gap: 15px;
+  }
+  &.menuOpen {
+    left: 256px;
+  }
+}
+
+.chevImage {
+  //   transition: 0.75s;
+  &.left {
+    transform: rotate(0deg);
+  }
+  &.right {
+    transform: rotate(180deg);
+  }
 }

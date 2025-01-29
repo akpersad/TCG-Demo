@@ -97,6 +97,7 @@ const CardsContainer = ({
       rarities: searchParams.get('rarities')?.split(',') || undefined,
     });
 
+    setShowMobileMenu(false);
     setSortByChoice(sanitizedSortBy);
     setDisplayCards(cardsResponse.cards);
     setTotalCardCount(cardsResponse.totalCount);
@@ -134,14 +135,28 @@ const CardsContainer = ({
 
   return (
     <div className='flex relative z-1'>
-      <div className={`${styles.sideMenuBtn} absolute sm:hidden`}>
+      <div
+        className={`${
+          styles.sideMenuBtnContainer
+        } absolute sm:hidden transition-transform ${
+          showMobileMenu ? styles.menuOpen : ''
+        }`}
+      >
         <button
           type='button'
-          className={` hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800 dark:hover:bg-blue-500`}
+          className={`${styles.sideMenuBtn} flex flex-row hover:text-white focus:outline-none  font-medium text-sm py-1 px-2 text-center items-center  dark:hover:text-white`}
           onClick={() => setShowMobileMenu(!showMobileMenu)}
         >
-          <Image src={ChevronRight} height={50} width={50} alt='Chevton' />
-
+          <Image
+            src={ChevronRight}
+            height={20}
+            width={20}
+            alt='Chevton'
+            className={`${styles.chevImage} ${
+              !showMobileMenu ? styles.left : styles.right
+            } transition-transform`}
+          />
+          <p className=''>Menu</p>
           <span className='sr-only'>Icon description</span>
         </button>
       </div>
