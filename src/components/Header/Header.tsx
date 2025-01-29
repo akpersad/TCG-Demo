@@ -164,7 +164,7 @@ const Header = () => {
               </li>
             </SignedIn>
             <SignedOut>
-              <li>
+              <li className={styles.signInButton}>
                 <SignInButton mode='modal' />
               </li>
               <li>

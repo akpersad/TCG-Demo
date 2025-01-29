@@ -13,3 +13,13 @@
     @include glassEffect;
   }
 }
+
+.disabledBtn {
+  background-color: #99a1af;
+  color: var(--disabledText);
+  cursor: not-allowed;
+  &:hover {
+    background-color: #99a1af;
+    background-image: none;
+  }
+}

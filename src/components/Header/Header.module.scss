@@ -86,3 +86,13 @@ a {
     }
   }
 }
+
+li.signInButton {
+  > button {
+    background-color: transparent;
+    @media (width < 48rem) {
+      padding-block: calc(var(--spacing) * 2);
+      padding-inline: calc(var(--spacing) * 3);
+    }
+  }
+}
