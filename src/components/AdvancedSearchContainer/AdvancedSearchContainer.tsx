@@ -123,7 +123,7 @@ const AdvancedSearchContainer = ({
   };
 
   return (
-    <div className='advanced-search-container container mx-4 sm:mx-auto my-8 relative'>
+    <div className='advanced-search-container container px-4 sm:px-0 sm:mx-auto my-8 relative'>
       <form className='sm:w-2/3 mx-auto mt-12' onSubmit={handleFormSubmit}>
         <div>
           {/* Collections */}
