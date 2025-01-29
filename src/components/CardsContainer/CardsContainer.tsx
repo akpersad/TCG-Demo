@@ -48,6 +48,7 @@ const CardsContainer = ({
     resetPageCount,
     supertype,
   }: GetCardsProps & { resetPageCount?: boolean }) => {
+    setShowMobileMenu(false);
     setDataLoading(true);
     const sanitizedPageSize = pageSize || selectedPageSize;
     const sanitizedPage = resetPageCount ? 1 : page || currentPage;
@@ -97,7 +98,6 @@ const CardsContainer = ({
       rarities: searchParams.get('rarities')?.split(',') || undefined,
     });
 
-    setShowMobileMenu(false);
     setSortByChoice(sanitizedSortBy);
     setDisplayCards(cardsResponse.cards);
     setTotalCardCount(cardsResponse.totalCount);

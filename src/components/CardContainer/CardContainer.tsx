@@ -363,7 +363,7 @@ const CardContainer = ({ cardData, userID, collections }: Props) => {
             {/* Set Name */}
             <div className={`flex flex-col ${styles.setItems}`}>
               <div className='calcHeader text-center text-sm'>Set</div>
-              <div className='calcBody flex mt-2 text-lg'>
+              <div className='calcBody flex mt-2 text-lg  text-center'>
                 <p className='flex justify-center items-center'>
                   <span className='mr-2'>
                     <Link
@@ -408,7 +408,7 @@ const CardContainer = ({ cardData, userID, collections }: Props) => {
             {/* Rarity */}
             <div className={`flex flex-col ${styles.setItems}`}>
               <div className='calcHeader text-center text-sm'>Rarity</div>
-              <div className='calcBody flex mt-2 text-lg'>
+              <div className='calcBody flex mt-2 text-lg text-center'>
                 <p className='flex justify-center items-center'>
                   <Link
                     href={`/search/cards?rarities=${cardData.rarity}`}
@@ -423,7 +423,7 @@ const CardContainer = ({ cardData, userID, collections }: Props) => {
             {/* Artist */}
             <div className={`flex flex-col ${styles.setItems}`}>
               <div className='calcHeader text-center text-sm'>Artist</div>
-              <div className='calcBody flex mt-2 text-lg'>
+              <div className='calcBody flex mt-2 text-lg text-right'>
                 <p className='flex justify-center items-center'>
                   <Link
                     href={`/search/cards?artist=${cardData.artist}`}
@@ -451,9 +451,7 @@ const CardContainer = ({ cardData, userID, collections }: Props) => {
                 Buy on TCG Player
               </Link>
             </div>
-            {/* <div className='flex justify-between flex-wrap mt-4'> */}
             {priceFragments(cardData.tcgplayer.prices)}
-            {/* </div> */}
           </div>
         )}
 
