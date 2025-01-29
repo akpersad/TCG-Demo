@@ -11,7 +11,6 @@ import styles from './Header.module.scss';
 const Header = () => {
   const pathname = usePathname();
   const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const [count, setCount] = useState(0);
   const menuRef = useRef<HTMLDivElement>(null);
   const menuButton = useRef<HTMLButtonElement>(null);
 
