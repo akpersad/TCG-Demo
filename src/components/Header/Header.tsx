@@ -48,8 +48,8 @@ const Header = () => {
   }, []);
 
   return (
-    <nav className='sticky border-gray-200 bg-transparent'>
-      <div className='max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4 '>
+    <nav className='border-gray-200 bg-transparent'>
+      <div className='max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4'>
         <Link
           href='/'
           className='flex items-center space-x-3 rtl:space-x-reverse'
@@ -95,7 +95,7 @@ const Header = () => {
           ref={menuRef}
           className={`${
             showMobileMenu ? 'block' : 'hidden'
-          } w-full md:block md:w-auto ${styles.navbar}`}
+          } w-full md:block md:w-auto z-10 ${styles.navbar}`}
           id='navbar-default bg-gray-50 dark:bg-gray-800'
         >
           <ul

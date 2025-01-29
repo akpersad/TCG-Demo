@@ -28,6 +28,7 @@ type Props = {
   paramSubType?: string | null;
   paramName: string;
   paramSupertype?: Supertype[];
+  showMobileMenu: boolean;
 };
 
 const energyBase = (param?: string | null) => {
@@ -53,6 +54,7 @@ const Sidebar = ({
   paramSubType,
   paramName,
   paramSupertype,
+  showMobileMenu,
 }: Props) => {
   const [searchTerm, setSearchTerm] = useState(paramName);
   const [searchEnergy, setSearchEnergy] = useState(energyBase(paramEnergy));
@@ -77,7 +79,9 @@ const Sidebar = ({
   return (
     <aside
       id='default-sidebar'
-      className={`fixed sm:relative top-0 left-0 z-40 w-64 h-screen sm:h-auto transition-transform -translate-x-full sm:translate-x-0 mt-64px ${styles.sidebar}`}
+      className={`fixed sm:relative top-0 left-0 z-40 w-64 h-screen sm:h-auto transition-transform ${
+        showMobileMenu ? '' : '-translate-x-full'
+      } sm:translate-x-0 mt-64px ${styles.sidebar}`}
       aria-label='Sidebar'
     >
       <div

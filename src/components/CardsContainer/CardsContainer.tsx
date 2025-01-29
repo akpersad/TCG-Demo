@@ -8,9 +8,12 @@ import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
 import { getCardsByName } from '@/app/utils/tcgClient';
 import { CardsResponseProps, Collection, GetCardsProps } from '@/types/types';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Image from 'next/image';
 import { filterParams, filterValidParams } from '@/app/utils/app';
 import { useUser } from '@clerk/nextjs';
 import { Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
+import ChevronRight from '../../../public/chevron_right.svg';
+import styles from './CardsContainer.module.scss';
 
 interface Props extends CardsResponseProps {
   likedCollection?: Collection | null;
@@ -33,6 +36,7 @@ const CardsContainer = ({
   const [currentPage, setCurrentPage] = useState<number>(page);
   const [totalCardCount, setTotalCardCount] = useState<number>(totalCount);
   const [dataLoading, setDataLoading] = useState<boolean>(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   const showCards = async ({
     pokemonName,
@@ -129,7 +133,18 @@ const CardsContainer = ({
   };
 
   return (
-    <div className='flex'>
+    <div className='flex relative z-1'>
+      <div className={`${styles.sideMenuBtn} absolute sm:hidden`}>
+        <button
+          type='button'
+          className={` hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800 dark:hover:bg-blue-500`}
+          onClick={() => setShowMobileMenu(!showMobileMenu)}
+        >
+          <Image src={ChevronRight} height={50} width={50} alt='Chevton' />
+
+          <span className='sr-only'>Icon description</span>
+        </button>
+      </div>
       <Sidebar
         showCards={showCards}
         searchLoading={false}
@@ -139,6 +154,7 @@ const CardsContainer = ({
         paramSupertype={
           searchParams.get('supertype')?.split(',') as Supertype[]
         }
+        showMobileMenu={showMobileMenu}
       />
       <div className={`py-4 px-5 mx-auto`}>
         {displayCards.length > 0 ? (
