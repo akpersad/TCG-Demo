@@ -145,13 +145,14 @@ const CardContainer = ({ cardData, userID, collections }: Props) => {
   };
 
   return (
-    <div className='card-container container mx-auto my-auto grid sm:grid-cols-2 gap-4 mt-10 px-2'>
+    <div className='card-container container mx-auto my-auto grid sm:grid-cols-2 gap-4 mt-1 sm:mt-10 px-6 sm:px-2'>
       <div className=''>
         <Image
           src={cardData.images.large}
           alt={cardData.name}
           width={500}
           height={700}
+          className={`mx-auto ${styles.cardImage}`}
         />
       </div>
       <div className='divide-y-2 divide-gray-300'>
@@ -163,10 +164,12 @@ const CardContainer = ({ cardData, userID, collections }: Props) => {
                 href={`/search/cards?pokemonName=${cardData.name}`}
                 className='text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent'
               >
-                <h2 className='text-4xl font-bold'>{cardData.name}</h2>
+                <h2 className='text-3xl sm:text-4xl font-bold'>
+                  {cardData.name}
+                </h2>
               </Link>
 
-              <h3 className='text-xl'>
+              <h3 className='text-base sm:text-xl'>
                 {/* Card Type and SubType */}
                 {cardData.supertype} | {cardData.subtypes.join(', ')}
               </h3>

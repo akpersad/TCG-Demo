@@ -22,3 +22,9 @@
     align-items: flex-end;
   }
 }
+
+@media (width < 48rem) {
+  .cardImage {
+    width: 60%;
+  }
+}

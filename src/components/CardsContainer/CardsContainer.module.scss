@@ -13,7 +13,6 @@
   z-index: 1;
   writing-mode: vertical-lr;
   text-orientation: upright;
-  //   transition: 0.75s;
   .sideMenuBtn {
     @include glassEffect;
     min-height: 100px;
@@ -25,7 +24,6 @@
 }
 
 .chevImage {
-  //   transition: 0.75s;
   &.left {
     transform: rotate(0deg);
   }
