@@ -3,6 +3,7 @@ import { filterParams } from '@/app/utils/app';
 import { getCardsByName } from '@/app/utils/tcgClient';
 import { CardsResponseProps, Collection, GetCardsProps } from '@/types/types';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import Image from 'next/image';
 import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
 import { Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
 import { useState } from 'react';
@@ -12,6 +13,8 @@ import Pagination from '@/components/Pagination/Pagination';
 import { updateCollectionRequest } from '@/app/client';
 import LoadingOverlay from '@/components/LoadingOverlay/LoadingOverlay';
 import NoResults from '@/components/NoResults/NoResults';
+import ChevronRight from '../../../public/chevron_right.svg';
+import styles from './CollectionContainer.module.scss';
 
 interface Props extends CardsResponseProps {
   collectionIds: string[];
@@ -44,6 +47,7 @@ const CollectionContainer = ({
   );
   const [isSubmissionPending, setIsSubmissionPending] =
     useState<boolean>(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const filterValidParams = (params: Record<string, any>) => {
@@ -69,6 +73,7 @@ const CollectionContainer = ({
     resetPageCount,
     supertype,
   }: GetCardsProps & { resetPageCount?: boolean }) => {
+    setShowMobileMenu(false);
     setDataLoading(true);
     const sanitizedPageSize = pageSize || selectedPageSize;
     const sanitizedPage = resetPageCount ? 1 : page || currentPage;
@@ -183,7 +188,32 @@ const CollectionContainer = ({
   };
 
   return (
-    <div className='flex'>
+    <div className='flex relative z-1'>
+      <div
+        className={`${
+          styles.sideMenuBtnContainer
+        } fixed sm:hidden transition-transform ${
+          showMobileMenu ? styles.menuOpen : ''
+        }`}
+      >
+        <button
+          type='button'
+          className={`${styles.sideMenuBtn} flex flex-row hover:text-white focus:outline-none  font-medium text-sm py-1 px-2 text-center items-center  dark:hover:text-white`}
+          onClick={() => setShowMobileMenu(!showMobileMenu)}
+        >
+          <Image
+            src={ChevronRight}
+            height={20}
+            width={20}
+            alt='Chevton'
+            className={`${styles.chevImage} ${
+              !showMobileMenu ? styles.left : styles.right
+            } transition-transform`}
+          />
+          <p className=''>Menu</p>
+          <span className='sr-only'>Icon description</span>
+        </button>
+      </div>
       <Sidebar
         showCards={showCards}
         searchLoading={false}
@@ -193,17 +223,18 @@ const CollectionContainer = ({
         paramSupertype={
           searchParams.get('supertype')?.split(',') as Supertype[]
         }
+        showMobileMenu={showMobileMenu}
       />
-      <div className={`py-4 px-5 mx-auto`}>
+      <div className={`pb-4 sm:py-4 px-5 mx-auto`}>
         {!isEditState && (
-          <div className='flex mb-4 justify-between items-center'>
-            <div>
+          <div className='flex mb-4 justify-between items-center flex-wrap sm:flex-nowrap'>
+            <div className='w-full sm:w-auto'>
               <h2 className='text-2xl'>{collection.name}</h2>
               <span className='text-base text-gray-500 break-all'>
                 {collection.description}
               </span>
             </div>
-            <div className='ml-2'>
+            <div className='mt-4 sm:mt-0 sm:ml-2'>
               <button
                 className='bg-blue-500 text-white px-4 py-2 rounded min-w-max'
                 onClick={() => setIsEditState(true)}
@@ -263,7 +294,7 @@ const CollectionContainer = ({
                   </label>
                 </div>
               </div>
-              <div className='flex sm:mt-0 mt-5 md:text-right justify-between items-start sm:justify-end'>
+              <div className='flex mt-0 md:text-right justify-between items-start sm:justify-end'>
                 <button
                   className='bg-gray-500 text-white px-4 py-2 rounded btn-secondary'
                   type='reset'
@@ -282,10 +313,10 @@ const CollectionContainer = ({
         )}
         {displayCards.length > 0 ? (
           <>
-            <div className='flex justify-end'>
+            <div className='flex justify-end flex-wrap mt-7 sm:mt-0'>
               {/* Sort By */}
 
-              <div className='mb-4 text-right mr-4'>
+              <div className='mb-4 text-right sm:mr-4'>
                 <label htmlFor='sortByFilter' className='mr-2'>
                   Sort By:
                 </label>

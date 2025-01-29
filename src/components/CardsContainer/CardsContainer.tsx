@@ -138,7 +138,7 @@ const CardsContainer = ({
       <div
         className={`${
           styles.sideMenuBtnContainer
-        } absolute sm:hidden transition-transform ${
+        } fixed sm:hidden transition-transform ${
           showMobileMenu ? styles.menuOpen : ''
         }`}
       >
