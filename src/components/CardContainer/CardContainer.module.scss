@@ -1,3 +1,5 @@
+@use 'src/styles/partials/breakpoints' as breakpoints;
+
 .attackContainer {
   &:first-of-type {
     margin-top: 0;
@@ -20,5 +22,11 @@
   }
   &:nth-of-type(3) {
     align-items: flex-end;
+  }
+}
+
+@include breakpoints.md-l {
+  .cardImage {
+    width: 60%;
   }
 }

@@ -8,9 +8,12 @@ import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
 import { getCardsByName } from '@/app/utils/tcgClient';
 import { CardsResponseProps, Collection, GetCardsProps } from '@/types/types';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Image from 'next/image';
 import { filterParams, filterValidParams } from '@/app/utils/app';
 import { useUser } from '@clerk/nextjs';
 import { Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
+import ChevronRight from '../../../public/chevron_right.svg';
+import styles from './CardsContainer.module.scss';
 
 interface Props extends CardsResponseProps {
   likedCollection?: Collection | null;
@@ -33,6 +36,7 @@ const CardsContainer = ({
   const [currentPage, setCurrentPage] = useState<number>(page);
   const [totalCardCount, setTotalCardCount] = useState<number>(totalCount);
   const [dataLoading, setDataLoading] = useState<boolean>(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   const showCards = async ({
     pokemonName,
@@ -44,6 +48,7 @@ const CardsContainer = ({
     resetPageCount,
     supertype,
   }: GetCardsProps & { resetPageCount?: boolean }) => {
+    setShowMobileMenu(false);
     setDataLoading(true);
     const sanitizedPageSize = pageSize || selectedPageSize;
     const sanitizedPage = resetPageCount ? 1 : page || currentPage;
@@ -112,16 +117,49 @@ const CardsContainer = ({
 
   const handlePageSizeChange = async (pageSize: number) => {
     setSelectedPageSize(pageSize);
-    await showCards({ ...getCurrentParams(), ...{ pageSize } });
+    await showCards({
+      ...getCurrentParams(),
+      resetPageCount: true,
+      ...{ pageSize },
+    });
   };
 
   const handleSortByChange = async (orderBy: string) => {
     setSortByChoice(orderBy);
-    await showCards({ ...getCurrentParams(), ...{ orderBy } });
+    await showCards({
+      ...getCurrentParams(),
+      resetPageCount: true,
+      ...{ orderBy },
+    });
   };
 
   return (
-    <div className='flex'>
+    <div className='flex relative z-1'>
+      <div
+        className={`${
+          styles.sideMenuBtnContainer
+        } fixed sm:hidden transition-transform ${
+          showMobileMenu ? styles.menuOpen : ''
+        }`}
+      >
+        <button
+          type='button'
+          className={`${styles.sideMenuBtn} flex flex-row hover:text-white focus:outline-none  font-medium text-sm py-1 px-2 text-center items-center  dark:hover:text-white`}
+          onClick={() => setShowMobileMenu(!showMobileMenu)}
+        >
+          <Image
+            src={ChevronRight}
+            height={20}
+            width={20}
+            alt='Chevton'
+            className={`${styles.chevImage} ${
+              !showMobileMenu ? styles.left : styles.right
+            } transition-transform`}
+          />
+          <p className=''>Menu</p>
+          <span className='sr-only'>Icon description</span>
+        </button>
+      </div>
       <Sidebar
         showCards={showCards}
         searchLoading={false}
@@ -131,14 +169,15 @@ const CardsContainer = ({
         paramSupertype={
           searchParams.get('supertype')?.split(',') as Supertype[]
         }
+        showMobileMenu={showMobileMenu}
       />
       <div className={`py-4 px-5 mx-auto`}>
         {displayCards.length > 0 ? (
           <>
-            <div className='flex justify-end'>
+            <div className='flex justify-end flex-wrap'>
               {/* Sort By */}
 
-              <div className='mb-4 text-right mr-4'>
+              <div className='mb-4 text-right mr-0 md:mr-3 lg:mr-4'>
                 <label htmlFor='sortByFilter' className='mr-2'>
                   Sort By:
                 </label>
@@ -167,8 +206,7 @@ const CardsContainer = ({
                 </select>
               </div>
 
-              {/* Put page size dropdown code heree */}
-
+              {/* Result Count */}
               <div className='mb-4 text-right'>
                 <label htmlFor='pageSize' className='mr-2'>
                   Result Count:

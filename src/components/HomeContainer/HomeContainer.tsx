@@ -12,7 +12,7 @@ const HomeContainer = () => {
         className={`flex justify-center items-start flex-wrap ${styles.homeContainer}`}
       >
         <div className={`w-full md:w-1/2 text-left ${styles.cardText}`}>
-          <h2 className='text-lg'>Gotta Collect 'Em All</h2>
+          <h2 className='text-lg'>Gotta Collect &apos;Em All</h2>
           <p className='text-2xl sm:text-4xl mt-4'>
             Look up your favorite cards. Add them to personal collections. Be
             the very best, like no one ever was.

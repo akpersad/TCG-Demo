@@ -21,7 +21,7 @@ const DisplayCards = ({
   return (
     <div className='relative'>
       {dataLoading && <LoadingOverlay />}
-      <div className='grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4'>
+      <div className='grid grid-cols-2 gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-4'>
         {displayCards?.map((card, index) => (
           <CardWithInformation
             key={`display-card-${card.id}-${index}`}

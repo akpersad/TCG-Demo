@@ -1,7 +1,7 @@
 @use 'src/styles/partials/mixins' as *;
 
 .sideMenuBtnContainer {
-  top: 270px;
+  top: 345px;
   left: 0;
   height: 50px;
   width: 50px;
@@ -10,7 +10,6 @@
   text-orientation: upright;
   .sideMenuBtn {
     @include glassEffect(45px);
-    border-radius: 0;
     border: none;
     min-height: 100px;
     gap: 15px;

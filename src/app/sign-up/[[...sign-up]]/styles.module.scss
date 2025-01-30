@@ -1,15 +1,20 @@
-@mixin glassEffect {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 16px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
+@use 'src/styles/partials/mixins' as *;
 
 .signUpContainer {
   height: calc(100vh - 180px);
   .innerContainer {
     @include glassEffect;
+    background: rgba(255, 255, 255, 0.2);
+    min-height: 408px;
+  }
+}
+
+.disabledBtn {
+  background-color: #99a1af;
+  color: var(--disabledText);
+  cursor: not-allowed;
+  &:hover {
+    background-color: #99a1af;
+    background-image: none;
   }
 }

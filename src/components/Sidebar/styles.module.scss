@@ -1,6 +1,16 @@
+@use 'src/styles/partials/mixins' as *;
+@use 'src/styles/partials/breakpoints' as breakpoints;
+
 .sidebar {
   .sidebarInner {
     min-width: 220px;
     border-right: 1px solid;
+  }
+}
+
+@include breakpoints.sm-l {
+  .sidebar {
+    @include glassEffect(45px);
+    border: none;
   }
 }

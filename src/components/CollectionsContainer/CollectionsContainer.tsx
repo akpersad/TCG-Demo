@@ -79,7 +79,7 @@ const CollectionsContainer = ({ userCollections, userID }: Props) => {
   }, [isModalOpen]);
 
   return (
-    <div className='container sm:w-2/3 px-2 sm:mx-auto my-8'>
+    <div className='container sm:w-2/3 px-4 sm:px-2 sm:mx-auto my-4 sm:my-8'>
       <div className='flex justify-between mb-8'>
         <h2 className='text-2xl'>Collections Page</h2>
         {userCollectionsStateObject.length < 5 && userID && (
@@ -126,10 +126,10 @@ const CollectionsContainer = ({ userCollections, userID }: Props) => {
 
       {isModalOpen && (
         <div
-          className='fixed inset-0 flex items-center justify-center bg-black opacity-85 modal-overlay'
+          className='fixed inset-0 flex items-center justify-center bg-black opacity-95 sm:opacity-85 modal-overlay'
           onClick={handleOutsideClick}
         >
-          <div className='border-gray-200 bg-gray-50 dark:bg-gray-800 p-8 rounded shadow-lg max-w-md w-full relative'>
+          <div className='mx-4 sm:mx-0 border-gray-200 bg-gray-50 dark:bg-gray-800 p-8 rounded shadow-lg opacity-100 max-w-md w-full relative'>
             <button
               onClick={closeModal}
               className={`absolute top-2 right-2 text-gray-500 hover:text-gray-700 ${styles.closeButton}`}

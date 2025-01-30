@@ -1,0 +1,65 @@
+$screen-sm: 40rem;
+$screen-md: 48rem;
+$screen-lg: 64rem;
+$screen-xl: 80rem;
+$screen-2xl: 96rem;
+
+@mixin sm {
+  @media (width >= $screen-sm) {
+    @content;
+  }
+}
+
+@mixin sm-l {
+  @media (width < $screen-sm) {
+    @content;
+  }
+}
+
+@mixin md {
+  @media (width >= $screen-md) {
+    @content;
+  }
+}
+
+@mixin md-l {
+  @media (width < $screen-md) {
+    @content;
+  }
+}
+
+@mixin lg {
+  @media (width >= $screen-lg) {
+    @content;
+  }
+}
+
+@mixin lg-l {
+  @media (width < $screen-lg) {
+    @content;
+  }
+}
+
+@mixin xl {
+  @media (width >= $screen-xl) {
+    @content;
+  }
+}
+
+@mixin xl-l {
+  @media (width < $screen-xl) {
+    @content;
+  }
+}
+
+@mixin xxl {
+  @media (width >= $screen-2xl) {
+    @content;
+  }
+}
+
+@mixin xxl-l {
+  @media (width < $screen-2xl) {
+    @content;
+  }
+}
