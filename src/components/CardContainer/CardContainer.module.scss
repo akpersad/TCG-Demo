@@ -1,3 +1,5 @@
+@use 'src/styles/partials/breakpoints' as breakpoints;
+
 .attackContainer {
   &:first-of-type {
     margin-top: 0;
@@ -23,7 +25,7 @@
   }
 }
 
-@media (width < 48rem) {
+@include breakpoints.md-l {
   .cardImage {
     width: 60%;
   }

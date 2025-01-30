@@ -1,9 +1,5 @@
-@mixin glassEffect {
-  background: rgba(0, 0, 0, 0.2);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(45px);
-  -webkit-backdrop-filter: blur(45px);
-}
+@use 'src/styles/partials/mixins' as *;
+@use 'src/styles/partials/breakpoints' as breakpoints;
 
 .sidebar {
   .sidebarInner {
@@ -12,8 +8,9 @@
   }
 }
 
-@media (width < 48rem) {
+@include breakpoints.sm-l {
   .sidebar {
-    @include glassEffect;
+    @include glassEffect(45px);
+    border: none;
   }
 }

@@ -1,3 +1,5 @@
+@use 'src/styles/partials/breakpoints' as breakpoints;
+
 .container {
   text-align: center;
   display: flex;
@@ -46,7 +48,7 @@
   margin-left: -50px;
 }
 
-@media (width >= 40rem) {
+@include breakpoints.sm {
   .leftCard {
     width: 125px;
   }
@@ -57,7 +59,7 @@
     width: 100px;
   }
 }
-@media (width >= 48rem) {
+@include breakpoints.md {
   .leftCard {
     width: 150px;
   }
@@ -72,7 +74,7 @@
     height: calc(100vh - 116px - 64px - 75px);
   }
 }
-@media (width >= 64rem) {
+@include breakpoints.lg {
   .leftCard {
     width: 200px;
   }
@@ -83,19 +85,3 @@
     width: 150px;
   }
 }
-// @media (width >= 80rem) {
-//   .leftCard {
-//   }
-//   .middleCard {
-//   }
-//   .rightCard {
-//   }
-// }
-// @media (width >= 96rem) {
-//   .leftCard {
-//   }
-//   .middleCard {
-//   }
-//   .rightCard {
-//   }
-// }

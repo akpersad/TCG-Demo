@@ -1,9 +1,4 @@
-@mixin glassEffect {
-  background: rgba(0, 0, 0, 0.2);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(45px);
-  -webkit-backdrop-filter: blur(45px);
-}
+@use 'src/styles/partials/mixins' as *;
 
 .sideMenuBtnContainer {
   top: 345px;
@@ -14,7 +9,8 @@
   writing-mode: vertical-lr;
   text-orientation: upright;
   .sideMenuBtn {
-    @include glassEffect;
+    @include glassEffect(45px);
+    border: none;
     min-height: 100px;
     gap: 15px;
   }

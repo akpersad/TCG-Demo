@@ -1,11 +1,5 @@
-@mixin glassEffect {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 16px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
+@use 'src/styles/partials/mixins' as *;
+@use 'src/styles/partials/breakpoints' as breakpoints;
 
 .active {
   color: var(--activeRed);
@@ -50,7 +44,7 @@ a {
     &:first-of-type {
       padding-left: calc(var(--spacing) * 2);
 
-      @media (width >= 48rem) {
+      @include breakpoints.md {
         padding-left: 0;
       }
     }
@@ -74,7 +68,7 @@ a {
 }
 
 .navbar {
-  @media (width < 48rem) {
+  @include breakpoints.md-l {
     position: absolute;
     top: 60px;
     left: 0;
@@ -82,7 +76,7 @@ a {
     margin-right: 10px;
     width: calc(100% - 20px);
     > ul {
-      @include glassEffect;
+      @include glassEffect(10px);
     }
   }
 }
@@ -90,7 +84,7 @@ a {
 li.signInButton {
   > button {
     background-color: transparent;
-    @media (width < 48rem) {
+    @include breakpoints.md-l {
       padding-block: calc(var(--spacing) * 2);
       padding-inline: calc(var(--spacing) * 3);
     }
