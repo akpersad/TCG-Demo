@@ -1,4 +1,5 @@
 'use server';
+import { Suspense } from 'react';
 import CardsContainer from '@/components/CardsContainer/CardsContainer';
 import { getCardsByName } from '@/app/utils/tcgClient';
 import { filterParams, isEmptyObject } from '@/app/utils/app';
@@ -28,15 +29,27 @@ const CardsPage = async ({ searchParams }: Props) => {
     ? await getCardsByName({})
     : await getCardsByName(filteredParams);
   return (
-    <CardsContainer
-      cards={initialCards.cards}
-      page={initialCards.page}
-      pageSize={initialCards.pageSize}
-      count={initialCards.count}
-      totalCount={initialCards.totalCount}
-      likedCollection={likedCollection}
-      likedCards={likedCards}
-    />
+    <Suspense
+      fallback={
+        <div className='w-full animate-pulse'>
+          <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
+            {[...Array(12)].map((_, i) => (
+              <div key={i} className='h-64 bg-gray-200 rounded-md'></div>
+            ))}
+          </div>
+        </div>
+      }
+    >
+      <CardsContainer
+        cards={initialCards.cards}
+        page={initialCards.page}
+        pageSize={initialCards.pageSize}
+        count={initialCards.count}
+        totalCount={initialCards.totalCount}
+        likedCollection={likedCollection}
+        likedCards={likedCards}
+      />
+    </Suspense>
   );
 };
 
