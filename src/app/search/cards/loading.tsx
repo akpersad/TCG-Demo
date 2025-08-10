@@ -1,6 +1,9 @@
+import ApiStatusModal from '@/components/ApiStatusModal/ApiStatusModal';
+
 export default function Loading() {
   return (
-    <div className='w-full'>
+    <div className='w-full relative'>
+      <ApiStatusModal />
       <div className='animate-pulse'>
         {/* Search controls skeleton */}
         <div className='mb-6'>

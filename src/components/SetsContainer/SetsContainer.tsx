@@ -2,6 +2,7 @@ import { GroupedSet } from '@/types/types';
 import styles from './SetsContainer.module.scss';
 import Image from 'next/image';
 import Link from 'next/link';
+import ApiStatusModal from '@/components/ApiStatusModal/ApiStatusModal';
 
 type Props = {
   sets: GroupedSet[];
@@ -10,6 +11,7 @@ type Props = {
 const SetsContainer = ({ sets }: Props) => {
   return (
     <div className='container mx-auto sm:my-8 px-4'>
+      <ApiStatusModal />
       {sets.map((group) => (
         <div key={group.series} className='rounded-lg mb-8'>
           <h2 className='text-xl sm:text-3xl font-semibold py-2 sm:py-4'>

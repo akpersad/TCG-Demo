@@ -20,10 +20,9 @@ const getCardsByIDs = (ids?: string[]) => {
   return query;
 };
 
-const getRequestURLForExtraFields = async (params: ParamsProps) => {
+const fetchCardsAndPagination = async (params: ParamsProps) => {
   const queryString = new URLSearchParams(params).toString();
-  const response = await fetch(
-    `https://api.pokemontcg.io/v2/cards?${queryString}`,
+  const response = await fetch(`https://api.pokemontcg.io/v2/cards?${queryString}`,
     {
       method: 'GET',
       headers: {
@@ -34,6 +33,7 @@ const getRequestURLForExtraFields = async (params: ParamsProps) => {
   );
   const json = await response.json();
   return {
+    cards: (json.data || []) as PokemonTCG.Card[],
     page: json.page as number,
     pageSize: json.pageSize as number,
     count: json.count as number,
@@ -131,21 +131,14 @@ export const getCardsByName = async ({
     raritiesStr,
   ];
 
-  const cards = await PokemonTCG.findCardsByQueries({
-    q: queryBuilder(queryArray),
-    orderBy,
-    pageSize,
-    page,
-  });
-
-  const paginationInfo = await getRequestURLForExtraFields({
+  // Single request for both data and pagination
+  const { cards, page: pg, pageSize: pz, count, totalCount } = await fetchCardsAndPagination({
     q: queryBuilder(queryArray),
     orderBy,
     pageSize: pageSize.toString(),
     page: page.toString(),
   });
-
-  return { cards, ...paginationInfo };
+  return { cards, page: pg, pageSize: pz, count, totalCount };
 };
 
 export const getCardById = async (id: string) => {

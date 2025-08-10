@@ -5,19 +5,35 @@ import {
   getSetAndSeriesNames,
   sortAndGroupSets,
   transformRarities,
+  getAllSets,
 } from '@/app/utils/tcgClient';
 import AdvancedSearchContainer from '@/components/AdvancedSearchContainer/AdvancedSearchContainer';
 import { currentUser } from '@clerk/nextjs/server';
-import { getAllSets } from 'pokemon-tcg-sdk-typescript/dist/sdk';
 
 const Page = async () => {
   const user = await currentUser();
   const collections = user?.id ? await getUserCollections(user.id) : [];
-  const initialSet = await getAllSets();
-  const sortedSets = sortAndGroupSets(initialSet);
+  let initialSet: unknown = [];
+  try {
+    // May intermittently fail due to upstream API instability
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore - allow empty fallback when API fails
+    initialSet = await getAllSets();
+  } catch {
+    initialSet = [] as never[];
+  }
+  const sortedSets = sortAndGroupSets(initialSet as never);
   const { setNames, seriesNames } = getSetAndSeriesNames(sortedSets);
-  const rarities = await getAllRarities();
-  const rarityObj = transformRarities(rarities);
+  let rarities: string[] = [];
+  try {
+    // Same as above: fail gracefully
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    rarities = await getAllRarities();
+  } catch {
+    rarities = [];
+  }
+  const rarityObj = transformRarities(rarities as never);
 
   return (
     <AdvancedSearchContainer
