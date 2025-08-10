@@ -18,7 +18,7 @@ const DisplayCards = ({
   likedCollection,
   likedCards,
 }: DisplayCardsProps) => {
-  return (
+  const result = (
     <div className='relative'>
       {dataLoading && <LoadingOverlay />}
       <div className='grid grid-cols-2 gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-4'>
@@ -34,6 +34,7 @@ const DisplayCards = ({
       </div>
     </div>
   );
+  return result;
 };
 
 export default DisplayCards;

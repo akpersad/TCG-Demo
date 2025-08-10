@@ -3,9 +3,7 @@ import Sidebar from '@/components/Sidebar/Sidebar';
 import DisplayCards from '@/components/DisplayCards/DisplayCards';
 import Pagination from '@/components/Pagination/Pagination';
 import NoResults from '@/components/NoResults/NoResults';
-import { useState } from 'react';
-import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
-import { getCardsByName } from '@/app/utils/tcgClient';
+import { useEffect, useState } from 'react';
 import { CardsResponseProps, Collection, GetCardsProps } from '@/types/types';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
@@ -14,6 +12,7 @@ import { useUser } from '@clerk/nextjs';
 import { Supertype } from 'pokemon-tcg-sdk-typescript/dist/sdk';
 import ChevronRight from '../../../public/chevron_right.svg';
 import styles from './CardsContainer.module.scss';
+import ApiStatusModal from '@/components/ApiStatusModal/ApiStatusModal';
 
 interface Props extends CardsResponseProps {
   likedCollection?: Collection | null;
@@ -30,13 +29,11 @@ const CardsContainer = ({
   const { isSignedIn } = useUser();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [displayCards, setDisplayCards] = useState<PokemonTCG.Card[]>(cards);
   const [selectedPageSize, setSelectedPageSize] = useState<number>(12);
   const [sortByChoice, setSortByChoice] = useState<string>('-set.releaseDate');
   const [currentPage, setCurrentPage] = useState<number>(page);
-  const [totalCardCount, setTotalCardCount] = useState<number>(totalCount);
-  const [dataLoading, setDataLoading] = useState<boolean>(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [isNavigating, setIsNavigating] = useState<boolean>(false);
 
   const showCards = async ({
     pokemonName,
@@ -49,7 +46,7 @@ const CardsContainer = ({
     supertype,
   }: GetCardsProps & { resetPageCount?: boolean }) => {
     setShowMobileMenu(false);
-    setDataLoading(true);
+    setIsNavigating(true);
     const sanitizedPageSize = pageSize || selectedPageSize;
     const sanitizedPage = resetPageCount ? 1 : page || currentPage;
     const sanitizedSortBy = orderBy || sortByChoice;
@@ -74,36 +71,14 @@ const CardsContainer = ({
     });
     const updatedParams = new URLSearchParams(queryParams).toString();
     router.push(`/search/cards?${updatedParams}`);
-
-    const cardsResponse = await getCardsByName({
-      pokemonName,
-      searchEnergy,
-      searchSubtypes,
-      supertype,
-      orderBy: sanitizedSortBy,
-      pageSize: sanitizedPageSize,
-      page: sanitizedPage,
-      artist: searchParams.get('artist') || undefined,
-      setId: searchParams.get('setId') || undefined,
-      setIdArray: searchParams.get('setIdArray')?.split(',') || undefined,
-      series: searchParams.get('series')?.split(',') || undefined,
-      weaknesses: searchParams.get('weaknesses')?.split(',') || undefined,
-      resistances: searchParams.get('resistances')?.split(',') || undefined,
-      hpMin: searchParams.get('hpMin')
-        ? parseInt(searchParams.get('hpMin')!, 10)
-        : undefined,
-      hpMax: searchParams.get('hpMax')
-        ? parseInt(searchParams.get('hpMax')!, 10)
-        : undefined,
-      rarities: searchParams.get('rarities')?.split(',') || undefined,
-    });
-
+    // Rely on route navigation (server-render) to fetch and hydrate new data
     setSortByChoice(sanitizedSortBy);
-    setDisplayCards(cardsResponse.cards);
-    setTotalCardCount(cardsResponse.totalCount);
-    setCurrentPage(cardsResponse.page);
-    setDataLoading(false);
   };
+
+  // Turn off loader when new server props arrive after navigation
+  useEffect(() => {
+    setIsNavigating(false);
+  }, [cards, totalCount, page]);
 
   const getCurrentParams = () => {
     const paramObj = Object.fromEntries(searchParams.entries());
@@ -135,6 +110,7 @@ const CardsContainer = ({
 
   return (
     <div className='flex relative z-1'>
+      <ApiStatusModal />
       <div
         className={`${
           styles.sideMenuBtnContainer
@@ -172,7 +148,7 @@ const CardsContainer = ({
         showMobileMenu={showMobileMenu}
       />
       <div className={`py-4 px-5 mx-auto`}>
-        {displayCards.length > 0 ? (
+        {cards.length > 0 ? (
           <>
             <div className='flex justify-end flex-wrap'>
               {/* Sort By */}
@@ -225,15 +201,15 @@ const CardsContainer = ({
             </div>
 
             <DisplayCards
-              displayCards={displayCards}
+              displayCards={cards}
               isSignedIn={isSignedIn}
-              dataLoading={dataLoading}
+              dataLoading={isNavigating}
               likedCollection={likedCollection}
               likedCards={likedCards}
             />
-            {totalCardCount > selectedPageSize && (
+            {totalCount > selectedPageSize && (
               <Pagination
-                totalCount={totalCardCount}
+                totalCount={totalCount}
                 pageSize={selectedPageSize}
                 currentPage={currentPage}
                 onPageChange={handlePageChange}

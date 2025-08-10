@@ -14,20 +14,38 @@ type Props = {
 };
 
 const CardsPage = async ({ searchParams }: Props) => {
-  const user = await currentUser();
-  const likedCollection = await getCollectionByUserIDAndName(
-    user?.id || '',
-    process.env.NEXT_PUBLIC_FAVORITE_COLLECTION_NAME || ''
-  );
-  const likedCards = likedCollection
-    ? await getCollectionCardIds(likedCollection._id)
-    : [];
+  const userPromise = currentUser();
+
+  // Resolve search params and build query
   const initialParams = await searchParams;
   const filteredParams = filterParams(initialParams);
 
-  const initialCards = isEmptyObject(filteredParams)
-    ? await getCardsByName({})
-    : await getCardsByName(filteredParams);
+  // Fire the cards request ASAP (independent of user/collections)
+  const cardsPromise = isEmptyObject(filteredParams)
+    ? getCardsByName({})
+    : getCardsByName(filteredParams);
+
+  // Fetch liked collection and ids in parallel, only if user exists
+  const likedCollectionPromise = (async () => {
+    const user = await userPromise;
+    if (!user?.id) return null;
+    return getCollectionByUserIDAndName(
+      user.id,
+      process.env.NEXT_PUBLIC_FAVORITE_COLLECTION_NAME || ''
+    );
+  })();
+
+  const likedCardsPromise = (async () => {
+    const collection = await likedCollectionPromise;
+    if (!collection?._id) return [] as string[];
+    return getCollectionCardIds(collection._id);
+  })();
+
+  const [initialCards, likedCollection, likedCards] = await Promise.all([
+    cardsPromise,
+    likedCollectionPromise,
+    likedCardsPromise,
+  ]);
   return (
     <Suspense
       fallback={
